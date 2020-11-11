@@ -13,6 +13,20 @@
       </tags>
   </entry>
   <entry>
+    <title>LLVM插桩</title>
+    <url>/index.html/2020/11/08/LLVM%E6%8F%92%E6%A1%A9/</url>
+    <content><![CDATA[<h1 id="LLVM-Pass-Development"><a href="#LLVM-Pass-Development" class="headerlink" title="LLVM Pass Development"></a>LLVM Pass Development</h1><h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ul>
+<li><a href="https://llvm.org/devmtg/2019-10/slides/Warzynski-WritingAnLLVMPass.pdf" target="_blank" rel="noopener">https://llvm.org/devmtg/2019-10/slides/Warzynski-WritingAnLLVMPass.pdf</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>Coding</category>
+      </categories>
+      <tags>
+        <tag>Code LLVM C++</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>ocaml_ch_01</title>
     <url>/index.html/2020/11/10/ocaml-ch-01/</url>
     <content><![CDATA[<h1 id="OCaml-Code-Snippets"><a href="#OCaml-Code-Snippets" class="headerlink" title="OCaml Code Snippets"></a>OCaml Code Snippets</h1><h3 id="局部定义"><a href="#局部定义" class="headerlink" title="局部定义"></a>局部定义</h3><figure class="highlight ocaml"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> x = <span class="number">1</span> <span class="keyword">in</span> <span class="keyword">let</span> y = x + x <span class="keyword">in</span> <span class="keyword">let</span> z = y + y <span class="keyword">in</span> x + y + z;;</span><br><span class="line">- : <span class="built_in">int</span> = <span class="number">7</span></span><br></pre></td></tr></table></figure>
@@ -29,20 +43,6 @@
       </categories>
       <tags>
         <tag>Code Ocaml</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>LLVM插桩</title>
-    <url>/index.html/2020/11/08/LLVM%E6%8F%92%E6%A1%A9/</url>
-    <content><![CDATA[<h1 id="LLVM-Pass-Development"><a href="#LLVM-Pass-Development" class="headerlink" title="LLVM Pass Development"></a>LLVM Pass Development</h1><h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ul>
-<li><a href="https://llvm.org/devmtg/2019-10/slides/Warzynski-WritingAnLLVMPass.pdf" target="_blank" rel="noopener">https://llvm.org/devmtg/2019-10/slides/Warzynski-WritingAnLLVMPass.pdf</a></li>
-</ul>
-]]></content>
-      <categories>
-        <category>Coding</category>
-      </categories>
-      <tags>
-        <tag>Code LLVM C++</tag>
       </tags>
   </entry>
 </search>

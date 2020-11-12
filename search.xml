@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>HelloWorld</title>
+    <url>/index.html/2020/11/08/HelloWorld/</url>
+    <content><![CDATA[<h1 id="Best-Life"><a href="#Best-Life" class="headerlink" title="Best Life"></a>Best Life</h1><p>这个世界还有那么多故事没有去倾听、那么多地方没有去旅游、那么多事情没有去尝试<br>还有那么多有趣的人没有去认识，要抓住平日里简简单单的快乐，不要总想着明天去创造更多的快乐，快乐一直就在每一分每一秒</p>
+]]></content>
+      <categories>
+        <category>uncatalogued</category>
+      </categories>
+      <tags>
+        <tag>Life</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>ocaml_ch_01</title>
     <url>/index.html/2020/11/10/ocaml-ch-01/</url>
     <content><![CDATA[<h1 id="OCaml-Code-Snippets"><a href="#OCaml-Code-Snippets" class="headerlink" title="OCaml Code Snippets"></a>OCaml Code Snippets</h1><h3 id="局部定义"><a href="#局部定义" class="headerlink" title="局部定义"></a>局部定义</h3><figure class="highlight ocaml"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> x = <span class="number">1</span> <span class="keyword">in</span> <span class="keyword">let</span> y = x + x <span class="keyword">in</span> <span class="keyword">let</span> z = y + y <span class="keyword">in</span> x + y + z;;</span><br><span class="line">- : <span class="built_in">int</span> = <span class="number">7</span></span><br></pre></td></tr></table></figure>
@@ -34,15 +46,16 @@
       </tags>
   </entry>
   <entry>
-    <title>HelloWorld</title>
-    <url>/index.html/2020/11/08/HelloWorld/</url>
-    <content><![CDATA[<h1 id="Best-Life"><a href="#Best-Life" class="headerlink" title="Best Life"></a>Best Life</h1><p>这个世界还有那么多故事没有去倾听、那么多地方没有去旅游、那么多事情没有去尝试<br>还有那么多有趣的人没有去认识，要抓住平日里简简单单的快乐，不要总想着明天去创造更多的快乐，快乐一直就在每一分每一秒</p>
+    <title>asmreview</title>
+    <url>/index.html/2020/11/12/asmreview/</url>
+    <content><![CDATA[<h1 id="汇编简单复习"><a href="#汇编简单复习" class="headerlink" title="汇编简单复习"></a>汇编简单复习</h1><h2 id="有关寄存器"><a href="#有关寄存器" class="headerlink" title="有关寄存器"></a>有关寄存器</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">_asm&#123;</span><br><span class="line">push AX ; esp -&#x3D; 2</span><br><span class="line">push BX ; esp -&#x3D; 2</span><br><span class="line">push EAX ; esp -&#x3D; 4</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 ]]></content>
       <categories>
-        <category>uncatalogued</category>
+        <category>review</category>
       </categories>
       <tags>
-        <tag>Life</tag>
+        <tag>asm</tag>
       </tags>
   </entry>
 </search>

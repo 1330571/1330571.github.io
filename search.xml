@@ -1,20 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>OcamlDataStructure</title>
-    <url>/2020/12/08/OcamlDataStructure/</url>
-    <content><![CDATA[<h1 id="Ocaml-Data-Structure"><a href="#Ocaml-Data-Structure" class="headerlink" title="Ocaml Data Structure"></a>Ocaml Data Structure</h1><p><img src="/2020/12/08/OcamlDataStructure/image-20201210000607642.png" alt="image-20201210000607642"></p>
-]]></content>
-      <categories>
-        <category>ocaml</category>
-      </categories>
-      <tags>
-        <tag>Data Structure</tag>
-        <tag>Programming Language</tag>
-        <tag>Ocaml</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>ocamlTree</title>
     <url>/2020/12/17/ocamlTree/</url>
     <content><![CDATA[<h1 id="用Ocaml编写一个简单的树应用"><a href="#用Ocaml编写一个简单的树应用" class="headerlink" title="用Ocaml编写一个简单的树应用"></a>用Ocaml编写一个简单的树应用</h1><p>树是一种非常重要的数据结构，在这边记录一下用Ocaml来编写树结构的一点经验</p>

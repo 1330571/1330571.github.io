@@ -1,3 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
+  <entry>
+    <title>OcamlDataStructure</title>
+    <url>/2020/12/08/OcamlDataStructure/</url>
+    <content><![CDATA[<h1 id="Ocaml-Data-Structure"><a href="#Ocaml-Data-Structure" class="headerlink" title="Ocaml Data Structure"></a>Ocaml Data Structure</h1><p><img src="/2020/12/08/OcamlDataStructure/image-20201210000607642.png" alt="image-20201210000607642"></p>
+]]></content>
+      <categories>
+        <category>ocaml</category>
+      </categories>
+      <tags>
+        <tag>Data Structure</tag>
+        <tag>Programming Language</tag>
+        <tag>Ocaml</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>ocamlTree</title>
+    <url>/2020/12/17/ocamlTree/</url>
+    <content><![CDATA[<h1 id="用Ocaml编写一个简单的树应用"><a href="#用Ocaml编写一个简单的树应用" class="headerlink" title="用Ocaml编写一个简单的树应用"></a>用Ocaml编写一个简单的树应用</h1><p>树是一种非常重要的数据结构，在这边记录一下用Ocaml来编写树结构的一点经验</p>
+<h2 id="纯函数式树结构-二叉搜索树"><a href="#纯函数式树结构-二叉搜索树" class="headerlink" title="纯函数式树结构-二叉搜索树"></a>纯函数式树结构-二叉搜索树</h2><p>在这种数据结构下我们不使用命令式的语法去编写数据结构</p>
+<h3 id="树数据结构定义"><a href="#树数据结构定义" class="headerlink" title="树数据结构定义"></a>树数据结构定义</h3><figure class="highlight ocaml"><table><tr><td class="code"><pre><span class="line"><span class="keyword">type</span> <span class="symbol">'a</span> tree = <span class="type">Empty</span> | <span class="type">Node</span> <span class="keyword">of</span> <span class="symbol">'a</span> * <span class="symbol">'a</span> tree * <span class="symbol">'a</span> tree</span><br></pre></td></tr></table></figure>
+
+<p>用这样的variants去定义一棵树，树由空结点和结点组成，结点由(值，左子树，右子树组成)</p>
+<h3 id="基础函数"><a href="#基础函数" class="headerlink" title="基础函数"></a>基础函数</h3><h4 id="树上搜索"><a href="#树上搜索" class="headerlink" title="树上搜索"></a>树上搜索</h4><figure class="highlight ocaml"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> <span class="keyword">rec</span> search <span class="keyword">value</span> = <span class="keyword">function</span></span><br><span class="line">  | <span class="type">Empty</span> -&gt; <span class="literal">false</span></span><br><span class="line">  | <span class="type">Node</span> (v, left, right) -&gt;</span><br><span class="line">      v == <span class="keyword">value</span> || search <span class="keyword">value</span> left || search <span class="keyword">value</span> right</span><br></pre></td></tr></table></figure>
+
+<h4 id="获取树的大小-size"><a href="#获取树的大小-size" class="headerlink" title="获取树的大小(size)"></a>获取树的大小(size)</h4><figure class="highlight ocaml"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> <span class="keyword">rec</span> size = <span class="keyword">function</span></span><br><span class="line">  | <span class="type">Empty</span> -&gt; <span class="number">0</span></span><br><span class="line">  | <span class="type">Node</span> (_, left, right) -&gt; <span class="number">1</span> + size left + size right</span><br></pre></td></tr></table></figure>
+
+<h4 id="插入结点"><a href="#插入结点" class="headerlink" title="插入结点"></a>插入结点</h4><figure class="highlight ocaml"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> <span class="keyword">rec</span> insert tree <span class="keyword">value</span> =</span><br><span class="line">  <span class="keyword">match</span> tree <span class="keyword">with</span></span><br><span class="line">  | <span class="type">Empty</span> -&gt; <span class="type">Node</span> (<span class="keyword">value</span>, <span class="type">Empty</span>, <span class="type">Empty</span>)</span><br><span class="line">  | <span class="type">Node</span> (nodeValue, left, right) -&gt;</span><br><span class="line">      <span class="keyword">if</span> nodeValue = <span class="keyword">value</span> <span class="keyword">then</span> tree</span><br><span class="line">      <span class="keyword">else</span> <span class="keyword">if</span> <span class="keyword">value</span> &gt; nodeValue <span class="keyword">then</span> <span class="type">Node</span> (nodeValue, insert left <span class="keyword">value</span>, right)</span><br><span class="line">      <span class="keyword">else</span> <span class="type">Node</span> (nodeValue, left, insert right <span class="keyword">value</span>)</span><br></pre></td></tr></table></figure>
+
+<h4 id="树的三种遍历方式"><a href="#树的三种遍历方式" class="headerlink" title="树的三种遍历方式"></a>树的三种遍历方式</h4><figure class="highlight ocaml"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> <span class="keyword">rec</span> mid_order = <span class="keyword">function</span></span><br><span class="line">  | <span class="type">Empty</span> -&gt; <span class="literal">[]</span></span><br><span class="line">  | <span class="type">Node</span> (<span class="keyword">value</span>, left, right) -&gt; mid_order left @ [<span class="keyword">value</span>] @ mid_order right</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> <span class="keyword">rec</span> pre_order = <span class="keyword">function</span></span><br><span class="line">  | <span class="type">Empty</span> -&gt; <span class="literal">[]</span></span><br><span class="line">  | <span class="type">Node</span> (<span class="keyword">value</span>, left, right) -&gt; (<span class="keyword">value</span> :: mid_order left) @ mid_order right</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> <span class="keyword">rec</span> post_order = <span class="keyword">function</span></span><br><span class="line">  | <span class="type">Empty</span> -&gt; <span class="literal">[]</span></span><br><span class="line">  | <span class="type">Node</span> (<span class="keyword">value</span>, left, right) -&gt; mid_order left @ mid_order right @ [<span class="keyword">value</span>]</span><br></pre></td></tr></table></figure>
+
+<h2 id="Huffman树"><a href="#Huffman树" class="headerlink" title="Huffman树"></a>Huffman树</h2><h3 id="数据结构定义"><a href="#数据结构定义" class="headerlink" title="数据结构定义"></a>数据结构定义</h3><figure class="highlight ocaml"><table><tr><td class="code"><pre><span class="line"><span class="keyword">type</span> huffmanTree = <span class="type">Empty</span> | <span class="type">HuffmanNode</span> <span class="keyword">of</span> huffmanNode</span><br><span class="line"></span><br><span class="line"><span class="keyword">and</span> huffmanNode =</span><br><span class="line">  &#123; data: <span class="built_in">char</span> option</span><br><span class="line">  ; count: <span class="built_in">int</span></span><br><span class="line">  ; <span class="keyword">mutable</span> left: huffmanTree</span><br><span class="line">  ; <span class="keyword">mutable</span> right: huffmanTree &#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="通过哈夫曼树生成编码表"><a href="#通过哈夫曼树生成编码表" class="headerlink" title="通过哈夫曼树生成编码表"></a>通过哈夫曼树生成编码表</h4><figure class="highlight ocaml"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> generateHuffmanCodeByTree tree =</span><br><span class="line">  <span class="keyword">let</span> code = <span class="built_in">ref</span> <span class="literal">[]</span> <span class="keyword">in</span></span><br><span class="line">  <span class="keyword">let</span> <span class="keyword">rec</span> generateCode nowCode tree =</span><br><span class="line">    <span class="keyword">match</span> tree <span class="keyword">with</span></span><br><span class="line">    | <span class="type">Empty</span> -&gt; <span class="literal">()</span></span><br><span class="line">    | <span class="type">HuffmanNode</span> &#123;data; count; left; right&#125; -&gt; (</span><br><span class="line">      <span class="keyword">match</span> data <span class="keyword">with</span></span><br><span class="line">      | <span class="type">None</span> -&gt;</span><br><span class="line">          generateCode (nowCode ^ <span class="string">"0"</span>) left ;</span><br><span class="line">          generateCode (nowCode ^ <span class="string">"1"</span>) right</span><br><span class="line">      | <span class="type">Some</span> _data -&gt; code := (data, nowCode) :: !code ) <span class="keyword">in</span></span><br><span class="line">  generateCode <span class="string">""</span> tree ; code</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+]]></content>
+      <categories>
+        <category>data structure</category>
+      </categories>
+      <tags>
+        <tag>ocaml</tag>
+        <tag>data structure</tag>
+      </tags>
+  </entry>
 </search>

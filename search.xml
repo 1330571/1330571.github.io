@@ -1,38 +1,96 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>ocamlTree</title>
-    <url>/2020/12/17/ocamlTree/</url>
-    <content><![CDATA[<h1 id="用Ocaml编写一个简单的树应用"><a href="#用Ocaml编写一个简单的树应用" class="headerlink" title="用Ocaml编写一个简单的树应用"></a>用Ocaml编写一个简单的树应用</h1><p>树是一种非常重要的数据结构，在这边记录一下用Ocaml来编写树结构的一点经验</p>
-<h2 id="纯函数式树结构-二叉搜索树"><a href="#纯函数式树结构-二叉搜索树" class="headerlink" title="纯函数式树结构-二叉搜索树"></a>纯函数式树结构-二叉搜索树</h2><p>在这种数据结构下我们不使用命令式的语法去编写数据结构</p>
-<h3 id="树数据结构定义"><a href="#树数据结构定义" class="headerlink" title="树数据结构定义"></a>树数据结构定义</h3><figure class="highlight ocaml"><table><tr><td class="code"><pre><span class="line"><span class="keyword">type</span> <span class="symbol">'a</span> tree = <span class="type">Empty</span> | <span class="type">Node</span> <span class="keyword">of</span> <span class="symbol">'a</span> * <span class="symbol">'a</span> tree * <span class="symbol">'a</span> tree</span><br></pre></td></tr></table></figure>
+    <title>tree</title>
+    <url>/2021/01/07/tree/</url>
+    <content><![CDATA[<h1 id="Ocaml-Tree-Data-Structure，-and-An-Intuitive-Tutorial"><a href="#Ocaml-Tree-Data-Structure，-and-An-Intuitive-Tutorial" class="headerlink" title="Ocaml Tree Data Structure， and An Intuitive Tutorial"></a>Ocaml Tree Data Structure， and An Intuitive Tutorial</h1><h2 id="树"><a href="#树" class="headerlink" title="树"></a>树</h2><p>树形结构是一种非线性数据结构，在计算机科学领域有非常多的用途，一棵树由<strong>根</strong>和<strong>孩子</strong>组成，树是递归定义的，我们可以将树定义为一个<strong>type</strong>，他可以是空结点，也可以是一个非空结点，非空结点会有左、右两颗子树和值，我们可以将树定义为这样的结构。</p>
+<figure class="highlight ocaml"><table><tr><td class="code"><pre><span class="line"><span class="keyword">type</span> <span class="symbol">'a</span> tree = <span class="type">Empty</span> | <span class="type">Node</span> <span class="keyword">of</span> <span class="symbol">'a</span> * <span class="symbol">'a</span> tree * <span class="symbol">'a</span> tree</span><br></pre></td></tr></table></figure>
 
-<p>用这样的variants去定义一棵树，树由空结点和结点组成，结点由(值，左子树，右子树组成)</p>
-<h3 id="基础函数"><a href="#基础函数" class="headerlink" title="基础函数"></a>基础函数</h3><h4 id="树上搜索"><a href="#树上搜索" class="headerlink" title="树上搜索"></a>树上搜索</h4><figure class="highlight ocaml"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> <span class="keyword">rec</span> search <span class="keyword">value</span> = <span class="keyword">function</span></span><br><span class="line">  | <span class="type">Empty</span> -&gt; <span class="literal">false</span></span><br><span class="line">  | <span class="type">Node</span> (v, left, right) -&gt;</span><br><span class="line">      v == <span class="keyword">value</span> || search <span class="keyword">value</span> left || search <span class="keyword">value</span> right</span><br></pre></td></tr></table></figure>
+<p>如构造一颗这样的树，我们就可以采用这样的方式。        </p>
+<img src="/.com//image-20210104215359261.png" alt="image-20210104215359261" style="zoom:50%;">
 
-<h4 id="获取树的大小-size"><a href="#获取树的大小-size" class="headerlink" title="获取树的大小(size)"></a>获取树的大小(size)</h4><figure class="highlight ocaml"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> <span class="keyword">rec</span> size = <span class="keyword">function</span></span><br><span class="line">  | <span class="type">Empty</span> -&gt; <span class="number">0</span></span><br><span class="line">  | <span class="type">Node</span> (_, left, right) -&gt; <span class="number">1</span> + size left + size right</span><br></pre></td></tr></table></figure>
+<p>该树的变量声明</p>
+<figure class="highlight ocaml"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> node = <span class="type">Node</span>(<span class="number">1</span>, <span class="type">Node</span>(<span class="number">5</span>, <span class="type">Node</span>(<span class="number">4</span>, <span class="type">Empty</span>, <span class="type">Empty</span>),<span class="type">Node</span> (<span class="number">2</span>, <span class="type">Empty</span>, <span class="type">Empty</span>)), <span class="type">Node</span>(<span class="number">3</span>, <span class="type">Node</span>(<span class="number">10</span>,<span class="type">Empty</span>,<span class="type">Node</span>(<span class="number">17</span>,<span class="type">Empty</span>,<span class="type">Empty</span>)), <span class="type">Node</span>(<span class="number">14</span>,<span class="type">Empty</span>,<span class="type">Empty</span>)));;</span><br></pre></td></tr></table></figure>
 
-<h4 id="插入结点"><a href="#插入结点" class="headerlink" title="插入结点"></a>插入结点</h4><figure class="highlight ocaml"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> <span class="keyword">rec</span> insert tree <span class="keyword">value</span> =</span><br><span class="line">  <span class="keyword">match</span> tree <span class="keyword">with</span></span><br><span class="line">  | <span class="type">Empty</span> -&gt; <span class="type">Node</span> (<span class="keyword">value</span>, <span class="type">Empty</span>, <span class="type">Empty</span>)</span><br><span class="line">  | <span class="type">Node</span> (nodeValue, left, right) -&gt;</span><br><span class="line">      <span class="keyword">if</span> nodeValue = <span class="keyword">value</span> <span class="keyword">then</span> tree</span><br><span class="line">      <span class="keyword">else</span> <span class="keyword">if</span> <span class="keyword">value</span> &gt; nodeValue <span class="keyword">then</span> <span class="type">Node</span> (nodeValue, insert left <span class="keyword">value</span>, right)</span><br><span class="line">      <span class="keyword">else</span> <span class="type">Node</span> (nodeValue, left, insert right <span class="keyword">value</span>)</span><br></pre></td></tr></table></figure>
+<p>获取树的大小函数</p>
+<figure class="highlight ocaml"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> <span class="keyword">rec</span> size = <span class="keyword">function</span></span><br><span class="line">  | <span class="type">Empty</span> -&gt; <span class="number">0</span></span><br><span class="line">  | <span class="type">Node</span>(_, left, right) -&gt; <span class="number">1</span> + size left + size right;;</span><br></pre></td></tr></table></figure>
 
-<h4 id="树的三种遍历方式"><a href="#树的三种遍历方式" class="headerlink" title="树的三种遍历方式"></a>树的三种遍历方式</h4><figure class="highlight ocaml"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> <span class="keyword">rec</span> mid_order = <span class="keyword">function</span></span><br><span class="line">  | <span class="type">Empty</span> -&gt; <span class="literal">[]</span></span><br><span class="line">  | <span class="type">Node</span> (<span class="keyword">value</span>, left, right) -&gt; mid_order left @ [<span class="keyword">value</span>] @ mid_order right</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> <span class="keyword">rec</span> pre_order = <span class="keyword">function</span></span><br><span class="line">  | <span class="type">Empty</span> -&gt; <span class="literal">[]</span></span><br><span class="line">  | <span class="type">Node</span> (<span class="keyword">value</span>, left, right) -&gt; (<span class="keyword">value</span> :: mid_order left) @ mid_order right</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> <span class="keyword">rec</span> post_order = <span class="keyword">function</span></span><br><span class="line">  | <span class="type">Empty</span> -&gt; <span class="literal">[]</span></span><br><span class="line">  | <span class="type">Node</span> (<span class="keyword">value</span>, left, right) -&gt; mid_order left @ mid_order right @ [<span class="keyword">value</span>]</span><br></pre></td></tr></table></figure>
+<p>先序、中序、后序遍历函数</p>
+<figure class="highlight ocaml"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> <span class="keyword">rec</span> preOrder = <span class="keyword">function</span></span><br><span class="line">| <span class="type">Empty</span> -&gt; <span class="literal">()</span></span><br><span class="line">| <span class="type">Node</span>(v,l,r) -&gt; <span class="type">Printf</span>.printf<span class="string">"%d "</span>  v ; preOrder(l) ; preOrder(r);;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> <span class="keyword">rec</span> midOrder = <span class="keyword">function</span></span><br><span class="line">| <span class="type">Empty</span> -&gt; <span class="literal">()</span></span><br><span class="line">| <span class="type">Node</span>(v,l,r) -&gt; midOrder(l) ; <span class="type">Printf</span>.printf<span class="string">"%d "</span>  v ; midOrder(r);;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> <span class="keyword">rec</span> postOrder = <span class="keyword">function</span></span><br><span class="line">| <span class="type">Empty</span> -&gt; <span class="literal">()</span></span><br><span class="line">| <span class="type">Node</span>(v,l,r) -&gt; postOrder(l) ; postOrder(r); <span class="type">Printf</span>.printf<span class="string">"%d "</span>  v ;;</span><br></pre></td></tr></table></figure>
 
-<h2 id="Huffman树"><a href="#Huffman树" class="headerlink" title="Huffman树"></a>Huffman树</h2><h3 id="数据结构定义"><a href="#数据结构定义" class="headerlink" title="数据结构定义"></a>数据结构定义</h3><figure class="highlight ocaml"><table><tr><td class="code"><pre><span class="line"><span class="keyword">type</span> huffmanTree = <span class="type">Empty</span> | <span class="type">HuffmanNode</span> <span class="keyword">of</span> huffmanNode</span><br><span class="line"></span><br><span class="line"><span class="keyword">and</span> huffmanNode =</span><br><span class="line">  &#123; data: <span class="built_in">char</span> option</span><br><span class="line">  ; count: <span class="built_in">int</span></span><br><span class="line">  ; <span class="keyword">mutable</span> left: huffmanTree</span><br><span class="line">  ; <span class="keyword">mutable</span> right: huffmanTree &#125;</span><br></pre></td></tr></table></figure>
+<p>测试上述基本函数</p>
+<figure class="highlight ocaml"><table><tr><td class="code"><pre><span class="line"><span class="type">Printf</span>.printf <span class="string">"树的大小为%d\n"</span>  (size(node));</span><br><span class="line">printf <span class="string">"先序遍历\n"</span>;</span><br><span class="line">preOrder node;</span><br><span class="line">printf <span class="string">"\n中序遍历\n"</span>;</span><br><span class="line">midOrder node;</span><br><span class="line">printf <span class="string">"\n后序遍历\n"</span>;</span><br><span class="line">postOrder node;</span><br></pre></td></tr></table></figure>
 
-<h4 id="通过哈夫曼树生成编码表"><a href="#通过哈夫曼树生成编码表" class="headerlink" title="通过哈夫曼树生成编码表"></a>通过哈夫曼树生成编码表</h4><figure class="highlight ocaml"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> generateHuffmanCodeByTree tree =</span><br><span class="line">  <span class="keyword">let</span> code = <span class="built_in">ref</span> <span class="literal">[]</span> <span class="keyword">in</span></span><br><span class="line">  <span class="keyword">let</span> <span class="keyword">rec</span> generateCode nowCode tree =</span><br><span class="line">    <span class="keyword">match</span> tree <span class="keyword">with</span></span><br><span class="line">    | <span class="type">Empty</span> -&gt; <span class="literal">()</span></span><br><span class="line">    | <span class="type">HuffmanNode</span> &#123;data; count; left; right&#125; -&gt; (</span><br><span class="line">      <span class="keyword">match</span> data <span class="keyword">with</span></span><br><span class="line">      | <span class="type">None</span> -&gt;</span><br><span class="line">          generateCode (nowCode ^ <span class="string">"0"</span>) left ;</span><br><span class="line">          generateCode (nowCode ^ <span class="string">"1"</span>) right</span><br><span class="line">      | <span class="type">Some</span> _data -&gt; code := (data, nowCode) :: !code ) <span class="keyword">in</span></span><br><span class="line">  generateCode <span class="string">""</span> tree ; code</span><br></pre></td></tr></table></figure>
+<p>结果</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">树的大小为8</span><br><span class="line">先序遍历</span><br><span class="line">1 5 4 2 3 10 17 14 </span><br><span class="line">中序遍历</span><br><span class="line">4 5 2 1 10 17 3 14 </span><br><span class="line">后序遍历</span><br><span class="line">4 2 5 17 10 14 3 1</span><br></pre></td></tr></table></figure>
+
+<h2 id="二叉查找树"><a href="#二叉查找树" class="headerlink" title="二叉查找树"></a>二叉查找树</h2><p>在有了基本的树结构之后，我们考虑构建二叉查找树，二叉查找树在插入结点时，将比当前结点大的结点插到右子树，否则插入到左子树，如果按照3-1-5-2-4-17-14-10的顺序插入，会构建如下的二叉查找树。</p>
+<img src="/.com//image-20210104221045493.png" alt="image-20210104221045493" style="zoom:50%;">
+
+<p>为了构建这样一颗二叉树，同时加上纯函数式的限制，我们每次插入结点时都会建造一颗新的二叉树。</p>
+<figure class="highlight ocaml"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> <span class="keyword">rec</span> insert tree <span class="keyword">value</span> =</span><br><span class="line">  <span class="keyword">match</span> tree <span class="keyword">with</span></span><br><span class="line">  | <span class="type">Empty</span> -&gt; <span class="type">Node</span> (<span class="keyword">value</span>, <span class="type">Empty</span>, <span class="type">Empty</span>)</span><br><span class="line">  | <span class="type">Node</span> (v, left, right) -&gt;</span><br><span class="line">      <span class="keyword">if</span> v = <span class="keyword">value</span> <span class="keyword">then</span> tree</span><br><span class="line">      <span class="keyword">else</span> <span class="keyword">if</span> <span class="keyword">value</span> &gt; v <span class="keyword">then</span> <span class="type">Node</span> (v, insert left <span class="keyword">value</span>, right)</span><br><span class="line">      <span class="keyword">else</span> <span class="type">Node</span> (v, left, insert right <span class="keyword">value</span>)</span><br></pre></td></tr></table></figure>
+
+<p>函数解释</p>
+<ul>
+<li><p>该函数是二叉排序树的插入函数，插入数值已存在时不产生任何动作，直接返回该结点 </p>
+</li>
+<li><p>插入数值小于当前结点 当前数值不变，右子树不变，那么就需要把这个值插入到左子树 </p>
+</li>
+<li><p>插入数值大于当前结点 当前数字不变，左子树不变，那么就需要把这个值插入到右子树</p>
+</li>
+<li><p>如果碰到了空结点，那么就代表寻找到了合适的插入位置，将其插入并且返回Node</p>
+</li>
+</ul>
+<p>函数测试</p>
+<figure class="highlight ocaml"><table><tr><td class="code"><pre><span class="line"><span class="comment">(* 3-1-5-2-4-17-14-10 *)</span></span><br><span class="line"><span class="keyword">let</span> node = insert <span class="type">Empty</span> <span class="number">3</span>;;</span><br><span class="line"><span class="keyword">let</span> node = insert node <span class="number">1</span>;;</span><br><span class="line"><span class="keyword">let</span> node = insert node <span class="number">5</span>;;</span><br><span class="line"><span class="keyword">let</span> node = insert node <span class="number">2</span>;;</span><br><span class="line"><span class="keyword">let</span> node = insert node <span class="number">4</span>;;</span><br><span class="line"><span class="keyword">let</span> node = insert node <span class="number">17</span>;;</span><br><span class="line"><span class="keyword">let</span> node = insert node <span class="number">14</span>;;</span><br><span class="line"><span class="keyword">let</span> node = insert node <span class="number">10</span>;;</span><br><span class="line"></span><br><span class="line">printf <span class="string">"\n二叉排序树中序遍历\n"</span>;</span><br><span class="line">midOrder node;</span><br></pre></td></tr></table></figure>
+
+<p>测试结果</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">二叉排序树中序遍历</span><br><span class="line">1 2 3 4 5 10 14 17</span><br></pre></td></tr></table></figure>
+
+<p>结构验证</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">utop <span class="comment"># node;;</span></span><br><span class="line">- : int tree =</span><br><span class="line">Node (3, Node (1, Empty, Node (2, Empty, Empty)),</span><br><span class="line"> Node (5, Node (4, Empty, Empty),</span><br><span class="line">  Node (17, Node (14, Node (10, Empty, Empty), Empty), Empty)))</span><br></pre></td></tr></table></figure>
+
+<p>对于二叉树排序树，有用的不仅仅是插入，还有查询和删除</p>
+<p>查询函数</p>
+<figure class="highlight ocaml"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> <span class="keyword">rec</span> query tree <span class="keyword">value</span> = </span><br><span class="line">  <span class="keyword">match</span> tree <span class="keyword">with</span></span><br><span class="line">  | <span class="type">Empty</span> -&gt; <span class="literal">false</span></span><br><span class="line">  | <span class="type">Node</span>(v,l,r) -&gt; v = <span class="keyword">value</span> || query l <span class="keyword">value</span> || query r <span class="keyword">value</span> ;;</span><br></pre></td></tr></table></figure>
+
+<p>验证正确性</p>
+<figure class="highlight ocaml"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> printBool = <span class="keyword">function</span></span><br><span class="line">| <span class="literal">true</span> -&gt; printf<span class="string">"结果为真\n"</span>;</span><br><span class="line">| <span class="literal">false</span> -&gt; printf<span class="string">"结果为假\n"</span>;;</span><br><span class="line"></span><br><span class="line">print_endline(<span class="string">""</span>);</span><br><span class="line">printBool (query node <span class="number">10</span>); <span class="comment">(* should be true *)</span></span><br><span class="line">printBool (query node <span class="number">11</span>); <span class="comment">(* should be false *)</span></span><br></pre></td></tr></table></figure>
+
+<p>删除函数</p>
+<p>对于二叉排序树的删除，我们分三种情况</p>
+<ol>
+<li>叶子结点，直接删除即可</li>
+<li>只有单一的孩子，将这个孩子结点与其父结点相连</li>
+<li>有左右孩子，寻找左子树最大结点$r$，覆盖该结点，此时删除直接完成</li>
+</ol>
+<p>对应图例</p>
+<ul>
+<li><p>情况1，删除结点2，2直接移除连线</p>
+<img src="/.com//image-20210105004203912.png" alt="image-20210105004203912" style="zoom:33%;">
+</li>
+<li><p>情况2 删除结点14，10与17直接相连</p>
+<img src="/.com//image-20210105004251316.png" alt="image-20210105004251316" style="zoom:33%;">
+</li>
+<li><p>情况3 删除结点3，2替换3的位置</p>
+<img src="/.com//image-20210105004503695.png" alt="image-20210105004503695" style="zoom:33%;">
 
 
 
-
-
-
-
+</li>
+</ul>
+<p>综上所述，我们可以得出下述的算法</p>
+<ol>
+<li>如果该结点是叶子结点，直接返回<strong>Empty</strong>，删除完毕。</li>
+<li>如果该结点是单孩子结点，直接返回他的<strong>孩子结点</strong>。</li>
+<li>如果该结点有左右子树，把最左子树的最右子树替换到被删除结点，同时被删除结点的上一个结点的右子树修改为空，对于函数式语言来说，显然我们要做的是两步骤，在被删除结点修改当前值$v$，以及最左子树的最右子树，返回一个<strong>Empty</strong>和一个$v’$</li>
+</ol>
 ]]></content>
       <categories>
-        <category>data structure</category>
+        <category>ocaml</category>
       </categories>
       <tags>
-        <tag>ocaml</tag>
-        <tag>data structure</tag>
+        <tag>ocaml data structure</tag>
       </tags>
   </entry>
 </search>

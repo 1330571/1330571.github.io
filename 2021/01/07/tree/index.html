@@ -22,7 +22,7 @@
 
   <meta name="description" content="用Ocaml编写的树 数据结构">
 <meta property="og:type" content="article">
-<meta property="og:title" content="OcamlTree">
+<meta property="og:title" content="Ocaml Tree,  An Intuitive Tutorial">
 <meta property="og:url" content="http://yoursite.com/2021/01/07/tree/index.html">
 <meta property="og:site_name" content="Hexo">
 <meta property="og:description" content="用Ocaml编写的树 数据结构">
@@ -33,7 +33,7 @@
 <meta property="og:image" content="http://yoursite.com/2021/01/07/tree/image-20210105004251316.png">
 <meta property="og:image" content="http://yoursite.com/2021/01/07/tree/image-20210105004503695.png">
 <meta property="article:published_time" content="2021-01-07T09:32:33.000Z">
-<meta property="article:modified_time" content="2021-01-07T09:54:52.771Z">
+<meta property="article:modified_time" content="2021-01-07T10:36:01.911Z">
 <meta property="article:author" content="John Doe">
 <meta property="article:tag" content="ocaml">
 <meta property="article:tag" content="data structure">
@@ -53,7 +53,7 @@
   };
 </script>
 
-  <title>OcamlTree | Hexo</title>
+  <title>Ocaml Tree,  An Intuitive Tutorial | Hexo</title>
   
 
 
@@ -199,7 +199,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          OcamlTree
+          Ocaml Tree,  An Intuitive Tutorial
         </h1>
 
         <div class="post-meta">
@@ -210,7 +210,7 @@
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2021-01-07 17:32:33 / Modified: 17:54:52" itemprop="dateCreated datePublished" datetime="2021-01-07T17:32:33+08:00">2021-01-07</time>
+              <time title="Created: 2021-01-07 17:32:33 / Modified: 18:36:01" itemprop="dateCreated datePublished" datetime="2021-01-07T17:32:33+08:00">2021-01-07</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -241,7 +241,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="Ocaml-Tree-Data-Structure，-and-An-Intuitive-Tutorial"><a href="#Ocaml-Tree-Data-Structure，-and-An-Intuitive-Tutorial" class="headerlink" title="Ocaml Tree Data Structure， and An Intuitive Tutorial"></a>Ocaml Tree Data Structure， and An Intuitive Tutorial</h1><h2 id="树"><a href="#树" class="headerlink" title="树"></a>树</h2><p>树形结构是一种非线性数据结构，在计算机科学领域有非常多的用途，一棵树由<strong>根</strong>和<strong>孩子</strong>组成，树是递归定义的，我们可以将树定义为一个<strong>type</strong>，他可以是空结点，也可以是一个非空结点，非空结点会有左、右两颗子树和值，我们可以将树定义为这样的结构。</p>
+        <h1 id="Ocaml-Tree-An-Intuitive-Tutorial"><a href="#Ocaml-Tree-An-Intuitive-Tutorial" class="headerlink" title="Ocaml Tree,  An Intuitive Tutorial"></a>Ocaml Tree,  An Intuitive Tutorial</h1><h2 id="树"><a href="#树" class="headerlink" title="树"></a>树</h2><p>树形结构是一种非线性数据结构，在计算机科学领域有非常多的用途，一棵树由<strong>根</strong>和<strong>孩子</strong>组成，树是递归定义的，我们可以将树定义为一个<strong>type</strong>，他可以是空结点，也可以是一个非空结点，非空结点会有左、右两颗子树和值，我们可以将树定义为这样的结构。</p>
 <figure class="highlight ocaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> <span class="symbol">'a</span> tree = <span class="type">Empty</span> | <span class="type">Node</span> <span class="keyword">of</span> <span class="symbol">'a</span> * <span class="symbol">'a</span> tree * <span class="symbol">'a</span> tree</span><br></pre></td></tr></table></figure>
 <p>如构造一颗这样的树，我们就可以采用这样的方式。        </p>
 <p><img src="/2021/01/07/tree/image-20210104215359261.png" alt="image-20210104215359261" style="zoom:50%;"></p>
@@ -304,8 +304,14 @@
 <ol>
 <li>如果该结点是叶子结点，直接返回<strong>Empty</strong>，删除完毕。</li>
 <li>如果该结点是单孩子结点，直接返回他的<strong>孩子结点</strong>。</li>
-<li>如果该结点有左右子树，把最左子树的最右子树替换到被删除结点，同时被删除结点的上一个结点的右子树修改为空，对于函数式语言来说，显然我们要做的是两步骤，在被删除结点修改当前值$v$，以及最左子树的最右子树，返回一个<strong>Empty</strong>和一个$v’$</li>
+<li>如果该结点有左右子树，把最左子树的最右子树替换到被删除结点，同时被删除结点的上一个结点的右子树修改为空，对于函数式语言来说，显然我们要做的是两步骤，在被删除结点修改当前值$v$，以及最左子树的最右子树，返回一个<strong>Empty</strong>和一个$v’$，所以我们这边需要一个新的函数去寻找左子树的最右子树</li>
 </ol>
+<figure class="highlight ocaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">(* 删除二叉排序树 *)</span></span><br><span class="line"><span class="comment">(* Thanks for the reference https://codereview.stackexchange.com/questions/187716/deleting-a-node-from-binary-tree-in-ocaml *)</span></span><br><span class="line"><span class="keyword">let</span> <span class="keyword">rec</span> mostRight = <span class="keyword">function</span></span><br><span class="line">  | <span class="type">Empty</span> -&gt; failwith <span class="string">"结点存在一些问题"</span></span><br><span class="line">  | <span class="type">Node</span> (v, _, <span class="type">Empty</span>) -&gt; v</span><br><span class="line">  | <span class="type">Node</span> (_, _, r) -&gt; mostRight r</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> <span class="keyword">rec</span> delete tree <span class="keyword">value</span> =</span><br><span class="line">  <span class="keyword">match</span> tree <span class="keyword">with</span></span><br><span class="line">  | <span class="type">Empty</span> -&gt; <span class="type">Empty</span></span><br><span class="line">  | <span class="type">Node</span> (v, l, r) <span class="keyword">when</span> v &lt; <span class="keyword">value</span> -&gt; <span class="type">Node</span> (v, l, delete r <span class="keyword">value</span>)</span><br><span class="line">  | <span class="type">Node</span> (v, l, r) <span class="keyword">when</span> v &gt; <span class="keyword">value</span> -&gt; <span class="type">Node</span> (v, delete l <span class="keyword">value</span>, r)</span><br><span class="line">  | <span class="type">Node</span> (v, <span class="type">Empty</span>, <span class="type">Empty</span>) -&gt; <span class="type">Empty</span> <span class="comment">(* 直接删除自己 对应情况1 *)</span></span><br><span class="line">  | <span class="type">Node</span> (v, <span class="type">Empty</span>, r) -&gt; r <span class="comment">(* 情况2 删除自己 *)</span></span><br><span class="line">  | <span class="type">Node</span> (v, l, <span class="type">Empty</span>) -&gt; l <span class="comment">(* 情况2 删除自己 *)</span></span><br><span class="line">  | <span class="type">Node</span> (v, l, r) -&gt; <span class="comment">(* 情况3，替换自己，删除原来的值 *)</span></span><br><span class="line">      <span class="keyword">let</span> newValue = mostRight l <span class="keyword">in</span></span><br><span class="line">      <span class="type">Node</span> (newValue, delete l newValue, r)</span><br></pre></td></tr></table></figure>
+<p>以及对应的测试</p>
+<figure class="highlight ocaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">(* 测试删除 *)</span></span><br><span class="line"><span class="keyword">let</span> delete2 = delete node <span class="number">2</span></span><br><span class="line"><span class="keyword">let</span> delete14 = delete node <span class="number">14</span></span><br><span class="line"><span class="keyword">let</span> delete3 = delete node <span class="number">3</span></span><br></pre></td></tr></table></figure>
+<p>测试结果</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">val delete : &#39;a tree -&gt; &#39;a -&gt; &#39;a tree &#x3D; &lt;fun&gt;</span><br><span class="line">val delete2 : int tree &#x3D;</span><br><span class="line">  Node (3, Node (1, Empty, Empty),</span><br><span class="line">   Node (5, Node (4, Empty, Empty),</span><br><span class="line">    Node (17, Node (14, Node (10, Empty, Empty), Empty), Empty)))</span><br><span class="line">val delete14 : int tree &#x3D;</span><br><span class="line">  Node (3, Node (1, Empty, Node (2, Empty, Empty)),</span><br><span class="line">   Node (5, Node (4, Empty, Empty),</span><br><span class="line">    Node (17, Node (10, Empty, Empty), Empty)))</span><br><span class="line">val delete3 : int tree &#x3D;</span><br><span class="line">  Node (2, Node (1, Empty, Empty),</span><br><span class="line">   Node (5, Node (4, Empty, Empty),</span><br><span class="line">    Node (17, Node (14, Node (10, Empty, Empty), Empty), Empty)))</span><br></pre></td></tr></table></figure>
+<p>可以看见确实成功的变成了我们图示的样子</p>
 
     </div>
 
@@ -380,7 +386,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Ocaml-Tree-Data-Structure，-and-An-Intuitive-Tutorial"><span class="nav-number">1.</span> <span class="nav-text">Ocaml Tree Data Structure， and An Intuitive Tutorial</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#树"><span class="nav-number">1.1.</span> <span class="nav-text">树</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二叉查找树"><span class="nav-number">1.2.</span> <span class="nav-text">二叉查找树</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Ocaml-Tree-An-Intuitive-Tutorial"><span class="nav-number">1.</span> <span class="nav-text">Ocaml Tree,  An Intuitive Tutorial</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#树"><span class="nav-number">1.1.</span> <span class="nav-text">树</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二叉查找树"><span class="nav-number">1.2.</span> <span class="nav-text">二叉查找树</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -511,6 +517,61 @@
 
 
   
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
 
   
 

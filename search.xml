@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>tree</title>
+    <title>OcamlTree</title>
     <url>/2021/01/07/tree/</url>
     <content><![CDATA[<h1 id="Ocaml-Tree-Data-Structure，-and-An-Intuitive-Tutorial"><a href="#Ocaml-Tree-Data-Structure，-and-An-Intuitive-Tutorial" class="headerlink" title="Ocaml Tree Data Structure， and An Intuitive Tutorial"></a>Ocaml Tree Data Structure， and An Intuitive Tutorial</h1><h2 id="树"><a href="#树" class="headerlink" title="树"></a>树</h2><p>树形结构是一种非线性数据结构，在计算机科学领域有非常多的用途，一棵树由<strong>根</strong>和<strong>孩子</strong>组成，树是递归定义的，我们可以将树定义为一个<strong>type</strong>，他可以是空结点，也可以是一个非空结点，非空结点会有左、右两颗子树和值，我们可以将树定义为这样的结构。</p>
 <figure class="highlight ocaml"><table><tr><td class="code"><pre><span class="line"><span class="keyword">type</span> <span class="symbol">'a</span> tree = <span class="type">Empty</span> | <span class="type">Node</span> <span class="keyword">of</span> <span class="symbol">'a</span> * <span class="symbol">'a</span> tree * <span class="symbol">'a</span> tree</span><br></pre></td></tr></table></figure>
 <p>如构造一颗这样的树，我们就可以采用这样的方式。        </p>
-<p><img src="/.com//image-20210104215359261.png" alt="image-20210104215359261" style="zoom:50%;"></p>
+<p><img src="/2021/01/07/tree/image-20210104215359261.png" alt="image-20210104215359261" style="zoom:50%;"></p>
 <p>该树的变量声明</p>
 <figure class="highlight ocaml"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> node = <span class="type">Node</span>(<span class="number">1</span>, <span class="type">Node</span>(<span class="number">5</span>, <span class="type">Node</span>(<span class="number">4</span>, <span class="type">Empty</span>, <span class="type">Empty</span>),<span class="type">Node</span> (<span class="number">2</span>, <span class="type">Empty</span>, <span class="type">Empty</span>)), <span class="type">Node</span>(<span class="number">3</span>, <span class="type">Node</span>(<span class="number">10</span>,<span class="type">Empty</span>,<span class="type">Node</span>(<span class="number">17</span>,<span class="type">Empty</span>,<span class="type">Empty</span>)), <span class="type">Node</span>(<span class="number">14</span>,<span class="type">Empty</span>,<span class="type">Empty</span>)));;</span><br></pre></td></tr></table></figure>
 <p>获取树的大小函数</p>
@@ -18,7 +18,7 @@
 <p>结果</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">树的大小为8</span><br><span class="line">先序遍历</span><br><span class="line">1 5 4 2 3 10 17 14 </span><br><span class="line">中序遍历</span><br><span class="line">4 5 2 1 10 17 3 14 </span><br><span class="line">后序遍历</span><br><span class="line">4 2 5 17 10 14 3 1</span><br></pre></td></tr></table></figure>
 <h2 id="二叉查找树"><a href="#二叉查找树" class="headerlink" title="二叉查找树"></a>二叉查找树</h2><p>在有了基本的树结构之后，我们考虑构建二叉查找树，二叉查找树在插入结点时，将比当前结点大的结点插到右子树，否则插入到左子树，如果按照3-1-5-2-4-17-14-10的顺序插入，会构建如下的二叉查找树。</p>
-<p><img src="/.com//image-20210104221045493.png" alt="image-20210104221045493" style="zoom:50%;"></p>
+<p><img src="/2021/01/07/tree/image-20210104221045493.png" alt="image-20210104221045493" style="zoom:50%;"></p>
 <p>为了构建这样一颗二叉树，同时加上纯函数式的限制，我们每次插入结点时都会建造一颗新的二叉树。</p>
 <figure class="highlight ocaml"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> <span class="keyword">rec</span> insert tree <span class="keyword">value</span> =</span><br><span class="line">  <span class="keyword">match</span> tree <span class="keyword">with</span></span><br><span class="line">  | <span class="type">Empty</span> -&gt; <span class="type">Node</span> (<span class="keyword">value</span>, <span class="type">Empty</span>, <span class="type">Empty</span>)</span><br><span class="line">  | <span class="type">Node</span> (v, left, right) -&gt;</span><br><span class="line">      <span class="keyword">if</span> v = <span class="keyword">value</span> <span class="keyword">then</span> tree</span><br><span class="line">      <span class="keyword">else</span> <span class="keyword">if</span> <span class="keyword">value</span> &gt; v <span class="keyword">then</span> <span class="type">Node</span> (v, insert left <span class="keyword">value</span>, right)</span><br><span class="line">      <span class="keyword">else</span> <span class="type">Node</span> (v, left, insert right <span class="keyword">value</span>)</span><br></pre></td></tr></table></figure>
 <p>函数解释</p>
@@ -53,13 +53,13 @@
 <p>对应图例</p>
 <ul>
 <li><p>情况1，删除结点2，2直接移除连线</p>
-<p><img src="/.com//image-20210105004203912.png" alt="image-20210105004203912" style="zoom:33%;"></p>
+<p><img src="/2021/01/07/tree/image-20210105004203912.png" alt="image-20210105004203912" style="zoom:33%;"></p>
 </li>
 <li><p>情况2 删除结点14，10与17直接相连</p>
-<p><img src="/.com//image-20210105004251316.png" alt="image-20210105004251316" style="zoom:33%;"></p>
+<p><img src="/2021/01/07/tree/image-20210105004251316.png" alt="image-20210105004251316" style="zoom:33%;"></p>
 </li>
 <li><p>情况3 删除结点3，2替换3的位置</p>
-<p><img src="/.com//image-20210105004503695.png" alt="image-20210105004503695" style="zoom:33%;"></p>
+<p><img src="/2021/01/07/tree/image-20210105004503695.png" alt="image-20210105004503695" style="zoom:33%;"></p>
 </li>
 </ul>
 <p>综上所述，我们可以得出下述的算法</p>

@@ -1,10 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>learnCPP1</title>
+    <url>/2021/01/30/learnCPP1/</url>
+    <content><![CDATA[<h1 id="C-学习-一"><a href="#C-学习-一" class="headerlink" title="C++学习(一)"></a>C++学习(一)</h1><p>该系列博客用来记录自己学习C++总结下来的要点和经验。</p>
+]]></content>
+      <categories>
+        <category>cpp</category>
+      </categories>
+      <tags>
+        <tag>cpp</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Ocaml Tree,  An Intuitive Tutorial</title>
     <url>/2021/01/07/tree/</url>
     <content><![CDATA[<h1 id="Ocaml-Tree-An-Intuitive-Tutorial"><a href="#Ocaml-Tree-An-Intuitive-Tutorial" class="headerlink" title="Ocaml Tree, An Intuitive Tutorial"></a>Ocaml Tree, An Intuitive Tutorial</h1><p>该文章主要描述了一些简单的树型数据结构。</p>
-<p>[toc]</p>
 <h2 id="基本树"><a href="#基本树" class="headerlink" title="基本树"></a>基本树</h2><p>树形结构是一种非线性数据结构，在计算机科学领域有非常多的用途，一棵树由<strong>根</strong>和<strong>孩子</strong>组成，树是递归定义的，我们可以将树定义为一个<strong>type</strong>，他可以是空结点，也可以是一个非空结点，非空结点会有左、右两颗子树和值，我们可以将树定义为这样的结构。</p>
 <figure class="highlight ocaml"><table><tr><td class="code"><pre><span class="line"><span class="keyword">type</span> <span class="symbol">'a</span> tree = <span class="type">Empty</span> | <span class="type">Node</span> <span class="keyword">of</span> <span class="symbol">'a</span> * <span class="symbol">'a</span> tree * <span class="symbol">'a</span> tree</span><br></pre></td></tr></table></figure>
 <p>如构造一颗这样的树，我们就可以采用这样的方式。</p>

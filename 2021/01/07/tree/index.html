@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-cn">
 <head>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
@@ -24,9 +24,9 @@
 <meta property="og:type" content="article">
 <meta property="og:title" content="Ocaml Tree,  An Intuitive Tutorial">
 <meta property="og:url" content="http://yoursite.com/2021/01/07/tree/index.html">
-<meta property="og:site_name" content="Hexo">
+<meta property="og:site_name" content="Toy House">
 <meta property="og:description" content="用Ocaml编写的树数据结构">
-<meta property="og:locale" content="en_US">
+<meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://yoursite.com/2021/01/07/tree/image-20210104215359261.png">
 <meta property="og:image" content="http://yoursite.com/2021/01/07/tree/image-20210104221045493.png">
 <meta property="og:image" content="http://yoursite.com/2021/01/07/tree/image-20210105004203912.png">
@@ -48,8 +48,8 @@
 <meta property="og:image" content="http://yoursite.com/2021/01/07/tree/image-20210108185746717.png">
 <meta property="og:image" content="http://yoursite.com/2021/01/07/tree/image-20210108214635693.png">
 <meta property="article:published_time" content="2021-01-07T09:32:33.000Z">
-<meta property="article:modified_time" content="2021-01-30T09:08:07.084Z">
-<meta property="article:author" content="John Doe">
+<meta property="article:modified_time" content="2021-01-30T09:11:25.410Z">
+<meta property="article:author" content="Magic Saltish">
 <meta property="article:tag" content="ocaml">
 <meta property="article:tag" content="data structure">
 <meta name="twitter:card" content="summary">
@@ -64,11 +64,11 @@
     sidebar: "",
     isHome : false,
     isPost : true,
-    lang   : 'en'
+    lang   : 'zh-cn'
   };
 </script>
 
-  <title>Ocaml Tree,  An Intuitive Tutorial | Hexo</title>
+  <title>Ocaml Tree,  An Intuitive Tutorial | Toy House</title>
   
 
 
@@ -119,9 +119,10 @@
 
     <a href="/" class="brand" rel="start">
       <span class="logo-line-before"><i></i></span>
-      <h1 class="site-title">Hexo</h1>
+      <h1 class="site-title">Toy House</h1>
       <span class="logo-line-after"><i></i></span>
     </a>
+      <p class="site-subtitle" itemprop="description">Code Life</p>
   </div>
 
   <div class="site-nav-right">
@@ -200,17 +201,17 @@
     
   
   
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-cn">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2021/01/07/tree/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
+      <meta itemprop="name" content="Magic Saltish">
+      <meta itemprop="description" content="Keep Learning.">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
+      <meta itemprop="name" content="Toy House">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
@@ -231,7 +232,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-01-30 17:08:07" itemprop="dateModified" datetime="2021-01-30T17:08:07+08:00">2021-01-30</time>
+                <time title="Modified: 2021-01-30 17:11:25" itemprop="dateModified" datetime="2021-01-30T17:11:25+08:00">2021-01-30</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -263,7 +264,6 @@
 
       
         <h1 id="Ocaml-Tree-An-Intuitive-Tutorial"><a href="#Ocaml-Tree-An-Intuitive-Tutorial" class="headerlink" title="Ocaml Tree, An Intuitive Tutorial"></a>Ocaml Tree, An Intuitive Tutorial</h1><p>该文章主要描述了一些简单的树型数据结构。</p>
-<p>[toc]</p>
 <h2 id="基本树"><a href="#基本树" class="headerlink" title="基本树"></a>基本树</h2><p>树形结构是一种非线性数据结构，在计算机科学领域有非常多的用途，一棵树由<strong>根</strong>和<strong>孩子</strong>组成，树是递归定义的，我们可以将树定义为一个<strong>type</strong>，他可以是空结点，也可以是一个非空结点，非空结点会有左、右两颗子树和值，我们可以将树定义为这样的结构。</p>
 <figure class="highlight ocaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> <span class="symbol">'a</span> tree = <span class="type">Empty</span> | <span class="type">Node</span> <span class="keyword">of</span> <span class="symbol">'a</span> * <span class="symbol">'a</span> tree * <span class="symbol">'a</span> tree</span><br></pre></td></tr></table></figure>
 <p>如构造一颗这样的树，我们就可以采用这样的方式。</p>
@@ -459,6 +459,13 @@
 
 
         
+    <div class="post-nav">
+      <div class="post-nav-item"></div>
+      <div class="post-nav-item">
+    <a href="/2021/01/30/learnCPP1/" rel="next" title="learnCPP1">
+      learnCPP1 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
       </footer>
     
   </article>
@@ -522,24 +529,24 @@
 
       <div class="site-overview-wrap sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-  <p class="site-author-name" itemprop="name">John Doe</p>
-  <div class="site-description" itemprop="description"></div>
+  <p class="site-author-name" itemprop="name">Magic Saltish</p>
+  <div class="site-description" itemprop="description">Keep Learning.</div>
 </div>
 <div class="site-state-wrap motion-element">
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">1</span>
+          <span class="site-state-item-count">2</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
-        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-count">2</span>
         <span class="site-state-item-name">categories</span>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-count">3</span>
         <span class="site-state-item-name">tags</span>
       </div>
   </nav>
@@ -570,7 +577,7 @@
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
-  <span class="author" itemprop="copyrightHolder">John Doe</span>
+  <span class="author" itemprop="copyrightHolder">Magic Saltish</span>
 </div>
   <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a>
   </div>

@@ -13,7 +13,7 @@
       </tags>
   </entry>
   <entry>
-    <title>C++文件库实践</title>
+    <title>C++文件库实践 filesystem</title>
     <url>/2021/01/30/learnCPPFileSystem/</url>
     <content><![CDATA[<h1 id="C-Filesystem-library"><a href="#C-Filesystem-library" class="headerlink" title="C++ Filesystem library"></a>C++ Filesystem library</h1><blockquote>
 <p>该<code>文件系统库</code>可能会因为操作系统的实现方式的不同产生不同的结果，如<strong>FAT</strong>系统没有软链接(Symbolic Links)和多份硬链接(Hardlinks)，如果同时有多个线程、进程、计算机操作同一个文件系统对象，则行为为未定义(undefined)</p>

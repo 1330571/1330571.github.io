@@ -48,7 +48,7 @@
 <meta property="og:image" content="http://yoursite.com/2021/01/07/tree/image-20210108185746717.png">
 <meta property="og:image" content="http://yoursite.com/2021/01/07/tree/image-20210108214635693.png">
 <meta property="article:published_time" content="2021-01-07T09:32:33.000Z">
-<meta property="article:modified_time" content="2021-01-30T09:11:25.410Z">
+<meta property="article:modified_time" content="2021-01-31T07:49:32.183Z">
 <meta property="article:author" content="Magic Saltish">
 <meta property="article:tag" content="ocaml">
 <meta property="article:tag" content="data structure">
@@ -142,6 +142,21 @@
     <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
 
   </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
         <li class="menu-item menu-item-archives">
 
     <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
@@ -232,7 +247,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-01-30 17:11:25" itemprop="dateModified" datetime="2021-01-30T17:11:25+08:00">2021-01-30</time>
+                <time title="Modified: 2021-01-31 15:49:32" itemprop="dateModified" datetime="2021-01-31T15:49:32+08:00">2021-01-31</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -251,6 +266,20 @@
               </span>
               <span class="post-meta-item-text">Views: </span>
               <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="Symbols count in article">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">Symbols count in article: </span>
+              <span>26k</span>
+            </span>
+            <span class="post-meta-item" title="Reading time">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">Reading time &asymp;</span>
+              <span>24 mins.</span>
             </span>
             <div class="post-description">用Ocaml编写的树数据结构</div>
 
@@ -380,11 +409,11 @@
 <p><img src="/2021/01/07/tree/image-20210108185746717.png" alt="image-20210108185746717" style="zoom:50%;"></p>
 <h4 id="LL"><a href="#LL" class="headerlink" title="LL"></a>LL</h4><p>分别插入<code>40 30 20 10</code></p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">val avlNode : int avlTree = Node (40, Empty, Empty, 1)</span><br><span class="line">val avlNode : int avlTree = Node (40, Node (30, Empty, Empty, 1), Empty, 2)</span><br><span class="line">val avlNode : int avlTree =</span><br><span class="line">  Node (30, Node (20, Empty, Empty, 1), Node (40, Empty, Empty, 1), 2)</span><br><span class="line">val avlNode : int avlTree =</span><br><span class="line">  Node (30, Node (20, Node (10, Empty, Empty, 1), Empty, 2),</span><br><span class="line">   Node (40, Empty, Empty, 1), 3)</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">		30</span><br><span class="line">	 &#x2F;  \</span><br><span class="line">	20  40</span><br><span class="line"> &#x2F;</span><br><span class="line">10</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">    30</span><br><span class="line">   &#x2F;  \</span><br><span class="line">  20  40</span><br><span class="line"> &#x2F;</span><br><span class="line">10</span><br></pre></td></tr></table></figure>
 <p>验证正确</p>
 <h4 id="LR"><a href="#LR" class="headerlink" title="LR"></a>LR</h4><p>分别插入<code>30 10 20</code></p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">val avlNode : int avlTree = Node (30, Empty, Empty, 1)</span><br><span class="line">val avlNode : int avlTree = Node (30, Node (10, Empty, Empty, 1), Empty, 2)</span><br><span class="line">val avlNode : int avlTree = Node (20, Node (10, Empty, Empty, 1), Node (30, Empty, Empty, 1), 2)</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">	20</span><br><span class="line"> &#x2F;  \</span><br><span class="line">10  30</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">  20</span><br><span class="line"> &#x2F;  \</span><br><span class="line">10  30</span><br></pre></td></tr></table></figure>
 <p>验证正确</p>
 <h4 id="RL"><a href="#RL" class="headerlink" title="RL"></a>RL</h4><p>分别插入<code>10 30 20</code></p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">val avlNode : int avlTree = Node (10, Empty, Empty, 1)</span><br><span class="line">val avlNode : int avlTree = Node (10, Empty, Node (30, Empty, Empty, 1), 2)</span><br><span class="line">val avlNode : int avlTree = Node (20, Node (10, Empty, Empty, 1), Node (30, Empty, Empty, 1), 2)</span><br></pre></td></tr></table></figure>
@@ -393,7 +422,7 @@
 <h4 id="插入较多的数字"><a href="#插入较多的数字" class="headerlink" title="插入较多的数字"></a>插入较多的数字</h4><figure class="highlight ocaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> avlNode = insert <span class="type">Empty</span> <span class="number">10</span></span><br><span class="line"><span class="keyword">let</span> avlNode = insert avlNode <span class="number">30</span></span><br><span class="line"><span class="keyword">let</span> avlNode = insert avlNode <span class="number">20</span></span><br><span class="line"><span class="keyword">let</span> avlNode = insert avlNode <span class="number">25</span></span><br><span class="line"><span class="keyword">let</span> avlNode = insert avlNode <span class="number">34</span></span><br><span class="line"><span class="keyword">let</span> avlNode = insert avlNode <span class="number">37</span></span><br><span class="line"><span class="keyword">let</span> avlNode = insert avlNode <span class="number">39</span></span><br><span class="line"><span class="keyword">let</span> avlNode = insert avlNode <span class="number">22</span></span><br><span class="line"><span class="keyword">let</span> avlNode = insert avlNode <span class="number">16</span></span><br><span class="line"><span class="keyword">let</span> avlNode = insert avlNode <span class="number">13</span></span><br><span class="line"><span class="keyword">let</span> avlNode = insert avlNode <span class="number">3</span></span><br><span class="line"><span class="keyword">let</span> avlNode = insert avlNode <span class="number">7</span></span><br></pre></td></tr></table></figure>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">val avlNode : int avlTree =</span><br><span class="line">  Node (20,</span><br><span class="line">   Node (13,</span><br><span class="line">    Node (7, Node (3, Empty, Empty, 1), Node (10, Empty, Empty, 1), 2),</span><br><span class="line">    Node (16, Empty, Empty, 1), 3),</span><br><span class="line">   Node (30, Node (25, Node (22, Empty, Empty, 1), Empty, 2),</span><br><span class="line">    Node (37, Node (34, Empty, Empty, 1), Node (39, Empty, Empty, 1), 2), 3),</span><br><span class="line">   4)</span><br></pre></td></tr></table></figure>
 <p>结果图示</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">				 20</span><br><span class="line">		 &#x2F;---  ---\</span><br><span class="line">		13  	    30</span><br><span class="line">	 &#x2F;  \      &#x2F;  \</span><br><span class="line">	7   16    25  37</span><br><span class="line"> &#x2F; \       &#x2F;   &#x2F;  \</span><br><span class="line">3  10     22  34  39</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">         20</span><br><span class="line">     &#x2F;--- ---\</span><br><span class="line">    13        30</span><br><span class="line">   &#x2F;  \      &#x2F;  \</span><br><span class="line">  7   16    25  37</span><br><span class="line"> &#x2F; \       &#x2F;   &#x2F;  \</span><br><span class="line">3  10     22  34  39</span><br></pre></td></tr></table></figure>
 <p>应该没有太多的问题</p>
 <h4 id="删除结点"><a href="#删除结点" class="headerlink" title="删除结点"></a>删除结点</h4><p>删除结点的过程和 BST 删除类似，唯一的区别是删除完之后需要重新调整平衡，有可能删除完之后会造成树失去平衡，步骤和<strong>insert</strong>差不多，请自行思考，如果思考不了看 C 语言版本。</p>
 <h4 id="排序数据输出-中序遍历"><a href="#排序数据输出-中序遍历" class="headerlink" title="排序数据输出(中序遍历)"></a>排序数据输出(中序遍历)</h4><figure class="highlight ocaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> <span class="keyword">rec</span> avlMidOrder = <span class="keyword">function</span></span><br><span class="line">  | <span class="type">Empty</span> -&gt; <span class="literal">()</span></span><br><span class="line">  | <span class="type">Node</span> (v, l, r, _) -&gt; avlMidOrder l ; printf <span class="string">"%d "</span> v ; avlMidOrder r</span><br></pre></td></tr></table></figure>
@@ -537,17 +566,21 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">2</span>
+          <span class="site-state-item-count">3</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
         <span class="site-state-item-count">2</span>
-        <span class="site-state-item-name">categories</span>
+        <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">3</span>
-        <span class="site-state-item-name">tags</span>
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
 </div>
@@ -578,6 +611,16 @@
     <i class="fa fa-heart"></i>
   </span>
   <span class="author" itemprop="copyrightHolder">Magic Saltish</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="Symbols count total">39k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="Reading time total">36 mins.</span>
 </div>
   <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a>
   </div>

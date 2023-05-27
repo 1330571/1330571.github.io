@@ -65,20 +65,6 @@
 
   
   <url>
-    <loc>http://1330571.github.io/tags/cpp/</loc>
-    <lastmod>2023-05-27</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>http://1330571.github.io/tags/std-library/</loc>
-    <lastmod>2023-05-27</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
     <loc>http://1330571.github.io/tags/rust/</loc>
     <lastmod>2023-05-27</lastmod>
     <changefreq>weekly</changefreq>
@@ -106,14 +92,21 @@
     <priority>0.2</priority>
   </url>
   
-
-  
   <url>
-    <loc>http://1330571.github.io/categories/MISC/</loc>
+    <loc>http://1330571.github.io/tags/cpp/</loc>
     <lastmod>2023-05-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
+  
+  <url>
+    <loc>http://1330571.github.io/tags/std-library/</loc>
+    <lastmod>2023-05-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+
   
   <url>
     <loc>http://1330571.github.io/categories/rust/</loc>
@@ -124,6 +117,13 @@
   
   <url>
     <loc>http://1330571.github.io/categories/ocaml/</loc>
+    <lastmod>2023-05-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>http://1330571.github.io/categories/MISC/</loc>
     <lastmod>2023-05-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>

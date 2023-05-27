@@ -83,6 +83,13 @@
 
   
   <url>
+    <loc>http://1330571.github.io/tags/CUDA/</loc>
+    <lastmod>2023-05-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
     <loc>http://1330571.github.io/tags/rust/</loc>
     <lastmod>2023-05-27</lastmod>
     <changefreq>weekly</changefreq>
@@ -91,20 +98,6 @@
   
   <url>
     <loc>http://1330571.github.io/tags/machine-learning/</loc>
-    <lastmod>2023-05-27</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>http://1330571.github.io/tags/ocaml/</loc>
-    <lastmod>2023-05-27</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>http://1330571.github.io/tags/data-structure/</loc>
     <lastmod>2023-05-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -125,7 +118,14 @@
   </url>
   
   <url>
-    <loc>http://1330571.github.io/tags/CUDA/</loc>
+    <loc>http://1330571.github.io/tags/ocaml/</loc>
+    <lastmod>2023-05-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>http://1330571.github.io/tags/data-structure/</loc>
     <lastmod>2023-05-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -134,14 +134,14 @@
 
   
   <url>
-    <loc>http://1330571.github.io/categories/rust/</loc>
+    <loc>http://1330571.github.io/categories/CUDA/</loc>
     <lastmod>2023-05-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>http://1330571.github.io/categories/ocaml/</loc>
+    <loc>http://1330571.github.io/categories/rust/</loc>
     <lastmod>2023-05-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -155,7 +155,7 @@
   </url>
   
   <url>
-    <loc>http://1330571.github.io/categories/CUDA/</loc>
+    <loc>http://1330571.github.io/categories/ocaml/</loc>
     <lastmod>2023-05-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>

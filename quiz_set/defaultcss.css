@@ -1,0 +1,24 @@
+.panel {
+  margin-left: 5em;
+}
+
+button {
+  text-align: center;
+  font-size: large;
+}
+
+.quiz {
+  border: 1px solid black;
+  margin-left: 2px;
+  margin-bottom: 10px;
+  padding: 0%;
+}
+.quiz > h2,
+label {
+  margin-left: 10px;
+}
+
+.help {
+  color: white;
+  margin-left: 10px;
+}

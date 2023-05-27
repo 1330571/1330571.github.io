@@ -1,13 +1,85 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.0.js"></script>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link rel="stylesheet" href="defaultcss.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Hall Bar工艺制备测验</title>
-</head>
-<body>
-    <h1>Hall Bar工艺制备测验</h1>
-    <p><a href="index.html">返回</a></p>
-</body>
+    <script type="text/javascript">
+      function check_ans(id, user_ans, real_ans, statistics) {
+        statistics["total"]++;
+        if (user_ans == real_ans) {
+          $("#" + id).css("background-color", "lightgreen");
+          $("#" + id + " .help").hide();
+          statistics["pass"]++;
+        } else {
+          $("#" + id).css("background-color", "red");
+          $("#" + id + " .help").show();
+        }
+      }
+      $(document).ready(function () {
+        $("button").click(function () {
+          let a1 = $("input[name='T1']:checked").val();
+          let a2 = $("input[name='T2']:checked").val();
+          if (a1 == undefined) {
+            alert("第一题没填写答案");
+            return;
+          }
+          if (a2 == undefined) {
+            alert("第二题没填写答案");
+            return;
+          }
+          var statistics = {
+            total: 0,
+            pass: 0,
+          };
+          check_ans("quiz1", a1, "B", statistics);
+          check_ans("quiz2", a2, "A", statistics);
+          console.log(statistics);
+          var html_internal = `
+            <p>答题情况 &nbsp;<b>${statistics["pass"]}/${statistics["total"]}</b></p>
+            <p>对于做错的题目你可以查看解析后再完成</p>
+            `;
+          $("#result").html(html_internal);
+        });
+      });
+    </script>
+  </head>
+  <body>
+    <div class="panel">
+      <h1>Hall Bar工艺制备测验</h1>
+
+      <form action="#" method="get">
+        <div class="quiz" id="quiz1">
+          <h2>题1: &nbsp;1 + 1 = ?</h2>
+          <label><input type="radio" name="T1" value="A" />答案是 1</label>
+          <p></p>
+          <label><input type="radio" name="T1" value="B" />答案是 2</label>
+          <p></p>
+          <label><input type="radio" name="T1" value="C"/ >答案是 3</label>
+          <p></p>
+          <p class="help" hidden>提示: +使用加法运算法则</p>
+        </div>
+      </form>
+
+      <form action="#" method="get">
+        <div class="quiz" id="quiz2">
+          <h2>题2: &nbsp;21 / 3 = ?</h2>
+          <label><input type="radio" name="T2" value="A" />答案是 7</label>
+          <p></p>
+          <label><input type="radio" name="T2" value="B" />答案是 11</label>
+          <p></p>
+          <label><input type="radio" name="T2" value="C"/ >答案是 5</label>
+          <p></p>
+          <p class="help" hidden>提示: /使用除法运算法则</p>
+        </div>
+      </form>
+
+      <button type="button">&nbsp;&nbsp;提交&nbsp;&nbsp;</button>
+      <div id="result"></div>
+      <p><a href="index.html"> 返回 </a></p>
+    </div>
+  </body>
 </html>

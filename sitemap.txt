@@ -1,9 +1,11 @@
-http://1330571.github.io/about/index.html
+http://1330571.github.io/posts/61255/
+http://1330571.github.io/posts/62927/
+http://1330571.github.io/posts/54798/
 http://1330571.github.io/posts/45670/
+http://1330571.github.io/about/index.html
 http://1330571.github.io/posts/4080/
 http://1330571.github.io/tags/index.html
 http://1330571.github.io/categories/index.html
-http://1330571.github.io/posts/54798/
 http://1330571.github.io/
 http://1330571.github.io/tags/rust/
 http://1330571.github.io/tags/machine-learning/
@@ -11,6 +13,8 @@ http://1330571.github.io/tags/ocaml/
 http://1330571.github.io/tags/data-structure/
 http://1330571.github.io/tags/cpp/
 http://1330571.github.io/tags/std-library/
+http://1330571.github.io/tags/CUDA/
 http://1330571.github.io/categories/rust/
 http://1330571.github.io/categories/ocaml/
 http://1330571.github.io/categories/MISC/
+http://1330571.github.io/categories/CUDA/

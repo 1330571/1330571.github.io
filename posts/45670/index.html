@@ -29,7 +29,7 @@
 <meta property="og:description" content="simple rust multi-classification">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2022-11-23T11:03:12.000Z">
-<meta property="article:modified_time" content="2022-11-24T07:15:44.582Z">
+<meta property="article:modified_time" content="2023-05-27T09:26:10.222Z">
 <meta property="article:author" content="YuSheng Xu">
 <meta property="article:tag" content="rust">
 <meta property="article:tag" content="machine learning">
@@ -231,7 +231,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-11-24 15:15:44" itemprop="dateModified" datetime="2022-11-24T15:15:44+08:00">2022-11-24</time>
+                <time title="Modified: 2023-05-27 17:26:10" itemprop="dateModified" datetime="2023-05-27T17:26:10+08:00">2023-05-27</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -349,7 +349,7 @@
 <p>for predict functionality, it can be implemented as same as the training process, just feed with the parameters and it will return the output, here we use the round function to make the result convert to an i32 type.</p>
 <figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> <span class="variable">item</span> <span class="keyword">in</span> data.<span class="title function_ invoke__">iter</span>() &#123; <span class="comment">//data is CustomDataset but use for prediction.</span></span><br><span class="line">    <span class="keyword">let</span> <span class="variable">item</span> = item.<span class="title function_ invoke__">translate_into</span>();</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">t</span> = item.<span class="title function_ invoke__">get_x</span>().<span class="title function_ invoke__">to_kind</span>(Kind::Float).<span class="title function_ invoke__">to_device</span>(<span class="keyword">self</span>.device);</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">r</span> = net.<span class="title function_ invoke__">forward</span>(&amp;t);</span><br><span class="line">    ans.<span class="title function_ invoke__">push</span>(r);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">println!</span>(<span class="string">&quot;Writing to submission.csv...&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> <span class="keyword">mut </span><span class="variable">wtr</span> = csv::Writer::<span class="title function_ invoke__">from_path</span>(<span class="string">&quot;./submission.csv&quot;</span>)?;</span><br><span class="line">wtr.<span class="title function_ invoke__">write_record</span>(&amp;[<span class="string">&quot;quality&quot;</span>])?;</span><br><span class="line"><span class="keyword">for</span> <span class="variable">i</span> <span class="keyword">in</span> ans.<span class="title function_ invoke__">iter</span>() &#123;</span><br><span class="line">    wtr.<span class="title function_ invoke__">write_record</span>(&amp;[<span class="built_in">format!</span>(<span class="string">&quot;&#123;&#125;&quot;</span>, i.<span class="title function_ invoke__">double_value</span>(&amp;[<span class="number">0</span>]).<span class="title function_ invoke__">round</span>() <span class="keyword">as</span> <span class="type">i64</span>)])?;</span><br><span class="line">&#125;</span><br><span class="line">wtr.<span class="title function_ invoke__">flush</span>()?;</span><br><span class="line"><span class="built_in">println!</span>(<span class="string">&quot;Writing finish&quot;</span>);</span><br></pre></td></tr></table></figure>
 
-<h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2><p>We have made our own simple implementation of datareader, dataset, and linear regression model with futures from reading to training, from training to prediction.<br>But we should use <code>Python</code> to make prototypes and search in most cases. From the <code>tch-rs</code> github issues and other forums like Reddit, we can see various talking about rust ml, the only scenario we should use rust is the high performance and portability required, not the training process and data handling.</p>
+<h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2><p>We have made our own simple implementation of datareader, dataset, and linear regression model with features from reading to training, from training to prediction.<br>But we should use <code>Python</code> to make prototypes and search in most cases. From the <code>tch-rs</code> github issues and other forums like Reddit, we can see various talking about rust ml, the only scenario we should use rust is the high performance and portability required, not the training process and data handling.</p>
 
     </div>
 
@@ -372,7 +372,10 @@
     <a href="/posts/54798/" rel="prev" title="C++文件库实践 filesystem">
       <i class="fa fa-chevron-left"></i> C++文件库实践 filesystem
     </a></div>
-      <div class="post-nav-item"></div>
+      <div class="post-nav-item">
+    <a href="/posts/62927/" rel="next" title="CUDA学习">
+      CUDA学习 <i class="fa fa-chevron-right"></i>
+    </a></div>
     </div>
       </footer>
     
@@ -445,20 +448,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">3</span>
+          <span class="site-state-item-count">5</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-count">4</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-count">7</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

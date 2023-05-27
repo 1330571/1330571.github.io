@@ -10,11 +10,11 @@ http://1330571.github.io/
 http://1330571.github.io/tags/CUDA/
 http://1330571.github.io/tags/rust/
 http://1330571.github.io/tags/machine-learning/
-http://1330571.github.io/tags/cpp/
-http://1330571.github.io/tags/std-library/
 http://1330571.github.io/tags/ocaml/
 http://1330571.github.io/tags/data-structure/
+http://1330571.github.io/tags/cpp/
+http://1330571.github.io/tags/std-library/
 http://1330571.github.io/categories/CUDA/
 http://1330571.github.io/categories/rust/
-http://1330571.github.io/categories/MISC/
 http://1330571.github.io/categories/ocaml/
+http://1330571.github.io/categories/MISC/

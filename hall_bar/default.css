@@ -13,11 +13,13 @@ button {
   margin-bottom: 10px;
   padding: 0%;
 }
-.quiz > h2,
-label {
+.quiz > h2 {
   margin-left: 10px;
 }
-
+.quiz > label {
+  margin-left: 5px;
+  display: inline-block;
+}
 .help {
   color: white;
   margin-left: 10px;

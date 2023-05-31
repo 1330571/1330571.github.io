@@ -8,40 +8,590 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Hall Bar工艺制备测验</title>
     <script type="text/javascript">
-      function check_ans(id, user_ans, real_ans, statistics) {
-        statistics["total"]++;
+      function check_ans(id, user_ans, real_ans, group, statistics) {
+        statistics[group]["total"]++;
+        console.log("user_ans", user_ans, " real_ans", real_ans);
         if (user_ans == real_ans) {
           $("#" + id).css("background-color", "lightgreen");
           $("#" + id + " .help").hide();
-          statistics["pass"]++;
+          statistics[group]["pass"]++;
         } else {
           $("#" + id).css("background-color", "red");
           $("#" + id + " .help").show();
         }
       }
+      function add_quiz(arr, desc, group, A, B, C, D, ans, hint) {
+        temp = {
+          desc,
+          group,
+          A,
+          B,
+          C,
+          D,
+          ans,
+          hint,
+        };
+        arr.push(temp);
+      }
+      function generate_quiz(
+        desc,
+        group,
+        option_a,
+        option_b,
+        option_c,
+        option_d,
+        ans,
+        hint
+      ) {
+        // shuffle ans and option
+        quiz_template = {
+          desc,
+          group,
+          A: option_a,
+          B: option_b,
+          C: option_c,
+          D: option_d,
+          ans_text: ans,
+          hint,
+        };
+        return quiz_template;
+      }
+
+      function generate_quiz_list(title, quiz_arr) {
+        quiz_arr.sort(function () {
+          return Math.random() - 0.5;
+        });
+        temp_list = [];
+
+        for (i in quiz_arr) {
+          quiz = quiz_arr[i];
+          temp_arr = [quiz["A"], quiz["B"], quiz["C"], quiz["D"]];
+          temp_arr.sort(function () {
+            return Math.random() - 0.5;
+          });
+          let ans_text = "";
+
+          switch (quiz["ans"]) {
+            case "A":
+              ans_text = quiz["A"];
+              break;
+            case "B":
+              ans_text = quiz["B"];
+              break;
+            case "C":
+              ans_text = quiz["C"];
+              break;
+            case "D":
+              ans_text = quiz["D"];
+              break;
+            default:
+              break;
+          }
+          quiz["A"] = temp_arr[0];
+          quiz["B"] = temp_arr[1];
+          quiz["C"] = temp_arr[2];
+          quiz["D"] = temp_arr[3];
+
+          temp_list.push(
+            generate_quiz(
+              quiz["desc"],
+              quiz["group"],
+              quiz["A"],
+              quiz["B"],
+              quiz["C"],
+              quiz["D"],
+              ans_text,
+              quiz["hint"]
+            )
+          );
+        }
+
+        $("#quiz_list").append(`<h2>${title}</h2>`);
+
+        for (i in temp_list) {
+          quiz = temp_list[i];
+          $("#quiz_list").append(`
+            <form action="#" method="get">
+              <div class="quiz" id="quiz${quiz_index}">
+                <h2>题${quiz_index}: &nbsp;${quiz["desc"]}</h2>
+                <label><input type="radio" name="T${quiz_index}" value="A" />A: ${quiz["A"]}</label>
+                <p></p>
+                <label><input type="radio" name="T${quiz_index}" value="B" />B: ${quiz["B"]}</label>
+                <p></p>
+                <label><input type="radio" name="T${quiz_index}" value="C"/ >C: ${quiz["C"]}</label>
+                <p></p>
+                <label><input type="radio" name="T${quiz_index}" value="D"/ >D: ${quiz["D"]}</label>
+                <p></p>
+                <p class="help" hidden>提示: ${quiz["hint"]}</p>
+              </div>
+            </form>
+          `);
+          quiz_index++;
+        }
+
+        quiz_list = quiz_list.concat(temp_list);
+      }
+
       $(document).ready(function () {
+        /*
+          创建题目逻辑
+          1. 所有题目变量
+          2. shuffle 题目
+          3. shuffle 选项
+          4. 生成HTML内容
+        */
+        const GROUP1 = "Hall Bar器件认识";
+        const GROUP2 = "Hall Bar制作工艺";
+        const GROUP3 = "MK6光刻机";
+        const GROUP4 = "ICP刻蚀机";
+        const GROUP5 = "双腔电子束蒸镀";
+        const GROUP6 = "安全注意事项";
+
+        group1 = [];
+        group2 = [];
+        group3 = [];
+        group4 = [];
+        group5 = [];
+        group6 = [];
+
+        add_quiz(
+          group1,
+          "Hall bar器件常用于研究材料的哪些电学性质？",
+          GROUP1,
+          "电导率",
+          "霍尔系数",
+          "载流子浓度",
+          "以上均是",
+          "D",
+          "Hall bar器件是磁学测试中常用的磁学器件，可以进行多种形式的电输运测量。它利用霍尔效应测量材料中的电子运动和磁场相互作用的特性。该器件通常由导电材料制成，如金属或半导体。广泛用于研究材料的电导率、霍尔系数、载流子浓度和载流子迁移率等电学性质。"
+        );
+
+        add_quiz(
+          group1,
+          "Hall bar器件对于理解材料的什么特性具有重要意义？",
+          GROUP1,
+          "磁性",
+          "热导率",
+          "光学性质",
+          "化学性质",
+          "A",
+          "Hall bar器件是磁学测试中常用的磁学器件，可以进行多种形式的电输运测量。……它们对于理解材料的磁性、拓扑特性以及半导体器件的设计和优化具有重要意义。"
+        );
+
+        add_quiz(
+          group1,
+          "在Hall bar器件中，霍尔电压是由于什么效应而产生的？",
+          GROUP1,
+          "霍尔效应",
+          "洛伦兹效应",
+          "热释效应",
+          "光电效应",
+          "A",
+          "Hall bar器件的基本结构是一个矩形形状的薄片，具有四个电极，分别称为霍尔电极和电流电极。在器件的中心区域有一个窄长的通道，称为霍尔通道。电流电极用于注入电流，而霍尔电极则用于测量在磁场作用下电子受力而产生的霍尔电压。当在霍尔通道中通过电流时，磁场垂直于器件表面施加在电子上的洛伦兹力将导致电子受力偏转。这导致在霍尔通道的两侧形成电势差，称为霍尔电压。"
+        );
+
+        add_quiz(
+          group2,
+          "Hall bar制备的操作流程中，以下哪个步骤不属于结构刻蚀？",
+          GROUP2,
+          "硅片清洗",
+          "光刻胶旋涂",
+          "电极蒸镀",
+          "离子束刻蚀",
+          "C",
+          "结构刻蚀：包括硅片清洗，Pt/Co多层膜沉积，光刻胶旋涂，曝光显影，离子束刻蚀，最后再去除光刻胶。"
+        );
+
+        add_quiz(
+          group2,
+          "最终制备完成的霍尔靶器件可以直接应用于哪些领域？",
+          GROUP2,
+          "磁场测量",
+          "计算机芯片",
+          "医疗领域",
+          "航空航天",
+          "A",
+          "整个制备工艺流程涉及多个步骤，包括基片准备、晶体生长、光刻、蚀刻、掺杂、金属化、封装和测试等。每个步骤都需要精确控制参数和条件，以确保器件的质量和性能。最终，制备完成的霍尔靶器件可以应用于各种磁场测量和控制系统中。"
+        );
+
+        add_quiz(
+          group2,
+          "以下哪个步骤是在基片表面生长薄膜？",
+          GROUP2,
+          "基片准备",
+          "光刻工艺",
+          "封装和测试",
+          "晶体生长",
+          "D",
+          "晶体生长：采用化学气相沉积（CVD）或分子束外延（MBE）等技术，将半导体材料沉积在基片上，生长成所需的薄膜结构。这个薄膜通常是N型或P型半导体。"
+        );
+
+        add_quiz(
+          group2,
+          "以下哪个步骤是用于定义霍尔器件的结构和几何形状？",
+          GROUP2,
+          "光刻工艺",
+          "蚀刻工艺",
+          "掺杂工艺",
+          "金属化工艺",
+          "A",
+          "光刻工艺：使用光刻胶将光刻图案传输到薄膜表面。光刻胶在曝光后会发生化学或物理反应，形成一个图案，用于定义霍尔器件的结构和几何形状。 "
+        );
+
+        add_quiz(
+          group2,
+          "形貌镜检是一种常用的质量控制方法，以下哪项是其目的之一？",
+          GROUP2,
+          "评估芯片的外观和表面质量",
+          "检测芯片中的开路、短路和断路等故障",
+          "验证芯片的内部电路连通性和功能是否正常",
+          "以上都不正确",
+          "A",
+          "形貌镜检是一种常用的质量控制方法，用于评估芯片的外观和表面质量。"
+        );
+
+        add_quiz(
+          group2,
+          "导通测试是一种常用的电性能测试方法，以下哪项是其目的之一？",
+          GROUP2,
+          "确定芯片内部电路的连通性和功能是否正常",
+          "检测芯片中的开路、短路、断路等故障",
+          "验证芯片的内部电路连通性和功能问题",
+          "以上都不正确",
+          "A",
+          "导通测试是一种常用的电性能测试方法，用于确定芯片内部电路的连通性和功能是否正常。"
+        );
+
+        add_quiz(
+          group2,
+          "电阻测试是一种常用的电性能测试方法，以下哪项是其目的之一？",
+          GROUP2,
+          "测量芯片内部电路元件的电阻值",
+          "验证电路的正确性",
+          "判断电路元件是否存在故障或损坏",
+          "以上都不正确",
+          "A",
+          "电阻测试是一种常用的电性能测试方法，用于测量芯片内部电路元件的电阻值。"
+        );
+
+        add_quiz(
+          group2,
+          "AHE测试是一种用于研究材料磁电性质的测试方法，以下哪项是其基本原理？",
+          GROUP2,
+          "霍尔效应",
+          "磁场效应",
+          "电场效应",
+          "以上都不正确",
+          "A",
+          "AHE（Anomalous Hall Effect，异常霍尔效应）测试是一种用于研究材料磁电性质的测试方法。AHE测试通过施加外部磁场并测量材料中的霍尔电压，以研究材料的自旋极化和磁性特性。AHE测试的基本原理是基于霍尔效应。"
+        );
+
+        add_quiz(
+          group3,
+          "如何打开MK6光刻机的汞灯电源？",
+          GROUP3,
+          "逆时针打开洁净墙上的压缩空气",
+          "按下按键面板左下角的“Load”键",
+          "在控制面板顺时针转黑色旋钮",
+          "按下汞灯控制器上的蓝色按钮",
+          "D",
+          "(见文档)打开总电源:图(2)-1开关向上为开 .打开汞灯电源(2) -2蓝色按钮，开后绿灯亮。"
+        );
+        //14
+
+        add_quiz(
+          group3,
+          "在安装光刻掩膜版时，如何确认掩膜版已经正确吸附？",
+          GROUP3,
+          '按"OFF"键检查是否完全盖住凹槽',
+          '按"Enter"键，显示"Mask Vacuum is On"',
+          '按"BSA"取消背部对准',
+          "按“Change Mask”键完成安装",
+          "B",
+          '将掩膜版金属面向上（如图(2) Cr面，看起来是暗银灰色）放置在掩膜版架上，将需要光刻的图形尽量对到通光孔中心，同时保证玻璃板完全覆盖掩膜版和架子贴合面的真空吸附凹槽。确认无问题，按下按键面板右侧的“Enter” 键，此时液晶显示“Mask Vacuum is On”即为正常。（如果显示OFF ，表示没吸住掩膜版，按"Enter" 取消吸附，检查是否完全盖住凹槽，按压掩膜版同时再按"Enter”）'
+        );
+        //14
+        add_quiz(
+          group3,
+          "如果开启汞灯后出现报警，应该采取什么措施？",
+          GROUP3,
+          '按"OFF"，等待120s',
+          "按“Change Mask”键重新安装光刻掩膜版",
+          "按“BSA”取消背部对准",
+          "联系管理员",
+          "A",
+          "开启汞灯：设备下方汞灯控制器间隔15-20s，依次按“ON”，“CP”，“START“键，显示lamp cold，即为正常。如报警按“OFF”，等待120s重新本步骤。再报警联系管理员。"
+        );
+
+        //15
+        add_quiz(
+          group3,
+          "如何调整样品旋转？",
+          GROUP3,
+          "使用样品台左侧旋钮",
+          "使用样品台右侧粗旋钮",
+          "使用样品台右侧细旋钮",
+          "使用显微镜上下左右箭头键",
+          "C",
+          "调整样品位置：样品位置调整依靠旋钮进行，样品台左侧旋钮负责上下移动，右侧粗旋钮负责左右移动，细旋钮负责样品旋转。"
+        );
+        //16
+        add_quiz(
+          group3,
+          "如何进行光学曝光检查？",
+          GROUP3,
+          " 按“Select Program”键",
+          "按“Alignment Check”键",
+          "按“Edit Parameter”键",
+          "按“Exposure”键",
+          "B",
+          "光学曝光：按“Alignment Check”键可以对套刻精准度进行检查（注意：此时样品不 能动），再次按下退出检查，按“Exposure” 设备会根据第3步设置的参数直接对样品进行曝光。曝光完成后,样品自动退下,之后可以抽出样品台取出样品，如需继续曝光其他样品，直接重复1-4步。"
+        );
+        //17
+        add_quiz(
+          group3,
+          "如何关闭MK6光刻机的汞灯光源？",
+          GROUP3,
+          "使用按键面板右侧鼠标关闭电脑",
+          "按控制面板左上角黑色旋钮左旋至Off",
+          "左旋设备左侧总开关关闭",
+          "按汞灯控制面板“Off”键",
+          "D",
+          "设备关机，使用按键面板右侧鼠标关闭电脑，按汞灯控制面板“Off”键关闭汞灯光源。"
+        );
+        //18
+        add_quiz(
+          group4,
+          "开机需要进行哪些操作？",
+          GROUP4,
+          "使用按键清洗和预热设备面板右侧鼠标关闭电脑",
+          "填写程序界面",
+          "点击LOAD按键",
+          "刷脸即可开机",
+          "D",
+          "设备只需刷脸开关机，不需其他操作。"
+        );
+        //19
+
+        add_quiz(
+          group4,
+          "应在哪个界面运行程序？",
+          GROUP4,
+          "Edit recipe界面",
+          "PUMP界面",
+          "Process功能的Recipe界面",
+          "Chamber界面",
+          "C",
+          "编辑程序，在“Process”编辑“Recipe”界面，建议选择一个四步刻蚀程序 为模板包含“pump”、“gas on”、“etch”“pump purge”，然后只需修改程序原名字，即为另存成自己的程序（修改程序名，原程序名称仍在，此功能等同于另存操作)。"
+        );
+        //20
+        add_quiz(
+          group4,
+          "ICP刻蚀程序中，下列哪个步骤的时间需要60s？",
+          GROUP4,
+          "pump",
+          "gas on",
+          "etch",
+          "pump purge",
+          "D",
+          "点击每个step界面程序，进入Edit recipe，编辑每一步骤程序。一般要求：“pump” 程序10s，压力为0，所有功率为0，所有气体为0，温度为目标温度并一直保持不变，HE背冷建议为10torr，20sccm并一直保持不变；“gas on”程序10s，压力为目标压力；所有功率为0，所有气体为目标；“etch”程序时间为目标时间，压力同上步骤相同或低于上步骤压力(使用Low Pressure Strike功能，参数为“上步骤压力”，“0”“5”)，功率为目标功率，所有气体同上步骤一致；“pump purge”程序60s,功率为0，压力为0，Ar气流量100sccm，其他气体为0，(如果刻蚀气体本身为Ar气体，时间可以缩短至20s)。"
+        );
+        //21
+        add_quiz(
+          group4,
+          "刻蚀过程中，Reflected power的功率应小于多少？",
+          GROUP4,
+          "20w",
+          "15w",
+          "10w",
+          "5w",
+          "C",
+          "监控程序运行状态，在Process功能的Chamber界面，关注程序运行状态,特别是在“etch”运行功率时的Reflected power,要求功率必须小于10w，否则需要“stop”掉程序，重新运行。"
+        );
+        //22
+        add_quiz(
+          group4,
+          "LOAD LACK腔盖应在哪一步操作之后打开？",
+          GROUP4,
+          "点击System的PUMP界面",
+          "gas on",
+          "etch",
+          "pump purge",
+          "A",
+          "点击System的PUMP界面。见下图左侧红框中的三个按键（该界面只准操作这三个按键），运行“Stop”然后点击“Vent”，等待倒计时为0后，打开LOAD LACK腔盖，并放入实验样品，实验样品载盘建议涂少量导热硅脂，所涂面积尽可能不超过样品面积"
+        );
+        //23
+        add_quiz(
+          group4,
+          "“pump purge”程序中，下列哪种参数值需要设置为0？",
+          GROUP4,
+          "时间",
+          "功率",
+          "温度",
+          "气流量",
+          "B",
+          "pump purge”程序60s,功率为0，压力为0，Ar气流量100sccm，其他气体为0，(如果刻蚀气体本身为Ar气体，时间可以缩短至20s)。"
+        );
+        //24
+        add_quiz(
+          group5,
+          "开机后，等待电脑开机后，需要打开哪些软件的自启动？",
+          GROUP5,
+          "维开双腔电子束",
+          "KEP Server Ex",
+          "电子枪控制和设置",
+          "晶控",
+          "B",
+          "打开电脑开关，等待电脑开机后“KEP Server Ex”软件完成自启动（约30s,轮件不要关闭），打开“维开双腔电子束”登录软件"
+        );
+        //25
+        add_quiz(
+          group5,
+          "如果对坩埚位置与靶材余量有所怀疑，想要检查镀膜靶材和坩埚情况，应该怎么做？",
+          GROUP5,
+          "对上腔放气检查B",
+          "对下腔放气检查C",
+          "更换晶振片",
+          "关闭上下腔门并锁止状态",
+          "B",
+          "如果对坩埚位置与靶材余量有所怀疑，要求必须对下腔放气检查镀膜靶材和坩埚情况。"
+        );
+        //26
+        add_quiz(
+          group5,
+          "打开主工艺编辑界面后，想要添加的第一个子过程AP_ L- first，需要选择？",
+          GROUP5,
+          "Auto pump",
+          "Auto pum",
+          "Auto Vent",
+          "Auto Deposition",
+          "A",
+          "打开主工艺编辑界面，新用户需右下角创建以自己姓名拼音的目录文件夹，然后选择Auto pump，选择子过程“AP_ L- first”并添加到左侧；再选择Auto pum，选择子过程“AP_ U-second”并添加到左侧；再选择Auto Deposition,选择编辑好的上步骤的子过程并添加到左侧;多层膜层可以再次添加Auto Deposition；最后选择Auto vent，选择子过程“Vent上腔延时30s”并添加到左侧。"
+        );
+        //27
+        add_quiz(
+          group5,
+          "编辑工艺时，不需要确定哪些参数？",
+          GROUP5,
+          "材料",
+          "速率",
+          "厚度",
+          "晶振片寿命",
+          "D",
+          "挡板打开，速率和功率稳定后，需在记录本上记录稳定后的束流，速率，功率以及蒸镀完成后的最终厚度。"
+        );
+        //28
+        add_quiz(
+          group6,
+          "在更换掩膜版架时，应对旧气管进行哪项操作？",
+          GROUP6,
+          "摆放载盘到正确位置",
+          "破真空并重新运行程序",
+          "用力顶进气管气嘴即可",
+          "将接头外圈卡套向前推拔下气嘴",
+          "D",
+          "如需替换掩膜版架(整片曝光，需改变通光孔尺寸)，找到样品架下方的铜制气接头，将接头外圈卡套向前推，气嘴即可拔下。将新的掩膜版架的气管气嘴用力顶进去即可。"
+        );
+        //29
+        add_quiz(
+          group6,
+          "刻蚀程序中要求反射功率不得大于多少？",
+          GROUP6,
+          "5",
+          "10",
+          "15",
+          "20",
+          "D",
+          "刻蚀过程中，听到“呲…呲…呲…”的周期噪音，请立即关注反射功率情况，如果反射功率远大于10，请尽快Stop掉程序，重新开始。"
+        );
+        //30
+        add_quiz(
+          group6,
+          "刻蚀工艺中，以下哪项参数设置无意义？",
+          GROUP6,
+          "Chiller温度",
+          "Cryo液氮模式",
+          "RF功率",
+          "ICP功率",
+          "B",
+          "刻蚀工艺参数范围：RF功率0-600W建议不超过400W,，ICP功率0-3000W建议不超2500W，Chiller 温度30C-80°C，建议低温在- 25C以上。Cryo液氮模式不可用，其值大小无意义。工艺压力一般建议2mtorr- 50mtorr, 常用10mtorr-30mtorr，Ar气容易起辉，除Ar气外，其他其他建议在10mtorr以下使用LOW PROSESS STRICK功能。"
+        );
+        //31
+        add_quiz(
+          group6,
+          "在蒸镀操作中，要求镀膜Au层不能超过多少？",
+          GROUP6,
+          "20nm",
+          "30nm",
+          "40nm",
+          "50nm",
+          "C",
+          "设备镀膜Au层，要求不能镀超过40nm。"
+        );
+        //32
+        add_quiz(
+          group6,
+          "OES功能可以点击什么采集数据？",
+          GROUP6,
+          "PUMP",
+          "gas on",
+          "Edit recipe",
+          "capture",
+          "D",
+          "设备镀膜Au层，要求不能镀超OES功能，可以直接使用已有程序，点击“capture”功能采集数据。"
+        );
+
+        quiz_list = []; // 所有题目
+        quiz_index = 1;
+
+        generate_quiz_list(GROUP1, group1);
+        generate_quiz_list(GROUP2, group2);
+        generate_quiz_list(GROUP3, group3);
+        generate_quiz_list(GROUP4, group4);
+        generate_quiz_list(GROUP5, group5);
+        generate_quiz_list(GROUP6, group6);
+
         $("button").click(function () {
-          let a1 = $("input[name='T1']:checked").val();
-          let a2 = $("input[name='T2']:checked").val();
-          if (a1 == undefined) {
-            alert("第一题没填写答案");
-            return;
-          }
-          if (a2 == undefined) {
-            alert("第二题没填写答案");
-            return;
-          }
           var statistics = {
-            total: 0,
-            pass: 0,
+            [GROUP1]: { pass: 0, total: 0 },
+            [GROUP2]: { pass: 0, total: 0 },
+            [GROUP3]: { pass: 0, total: 0 },
+            [GROUP4]: { pass: 0, total: 0 },
+            [GROUP5]: { pass: 0, total: 0 },
+            [GROUP6]: { pass: 0, total: 0 },
           };
-          check_ans("quiz1", a1, "B", statistics);
-          check_ans("quiz2", a2, "A", statistics);
+          for (let i = 0; i < quiz_list.length; i++) {
+            let ans = $(`input[name='T${i + 1}']:checked`).val();
+            let real_ans = "";
+            if (quiz_list[i]["ans_text"] == quiz_list[i]["A"]) real_ans = "A";
+            if (quiz_list[i]["ans_text"] == quiz_list[i]["B"]) real_ans = "B";
+            if (quiz_list[i]["ans_text"] == quiz_list[i]["C"]) real_ans = "C";
+            if (quiz_list[i]["ans_text"] == quiz_list[i]["D"]) real_ans = "D";
+
+            check_ans(
+              `quiz${i + 1}`,
+              ans,
+              real_ans,
+              quiz_list[i]["group"],
+              statistics
+            );
+          }
           console.log(statistics);
-          var html_internal = `
-            <p>答题情况 &nbsp;<b>${statistics["pass"]}/${statistics["total"]}</b></p>
-            <p>对于做错的题目你可以查看解析后再次提交</p>
-            `;
+          pass = 0;
+          total = 0;
+          var html_internal = "";
+          //枚举每个Group
+          for (group in statistics) {
+            html_internal =
+              html_internal +
+              `<p>${group} 情况: <b>${statistics[group]["pass"]}/${statistics[group]["total"]}</b></p>`;
+            pass += statistics[group]["pass"];
+            total += statistics[group]["total"];
+          }
+          html_internal =
+            html_internal + `<p>答题情况 &nbsp;<b>${pass}/${total}</b></p>`;
+          html_internal =
+            html_internal + "<p>对于做错的题目你可以修改后再次提交</p>";
           $("#result").html(html_internal);
         });
       });
@@ -50,32 +600,13 @@
   <body>
     <div class="panel">
       <h1>Hall Bar工艺制备测验</h1>
+      <p>1.本次测试会按照题目的类别进行编排，请您先对基础知识进行学习</p>
+      <p>2.在完成测试后，点击*提交*按钮，系统会对您的答题情况进行评分</p>
+      <p>
+        3.尽管您可以反复提交答案，但您必须认真答题，安全理论知识<b>十分重要</b>
+      </p>
 
-      <form action="#" method="get">
-        <div class="quiz" id="quiz1">
-          <h2>题1: &nbsp;1 + 1 = ?</h2>
-          <label><input type="radio" name="T1" value="A" />答案是 1</label>
-          <p></p>
-          <label><input type="radio" name="T1" value="B" />答案是 2</label>
-          <p></p>
-          <label><input type="radio" name="T1" value="C"/ >答案是 3</label>
-          <p></p>
-          <p class="help" hidden>提示: +使用加法运算法则</p>
-        </div>
-      </form>
-
-      <form action="#" method="get">
-        <div class="quiz" id="quiz2">
-          <h2>题2: &nbsp;21 / 3 = ?</h2>
-          <label><input type="radio" name="T2" value="A" />答案是 7</label>
-          <p></p>
-          <label><input type="radio" name="T2" value="B" />答案是 11</label>
-          <p></p>
-          <label><input type="radio" name="T2" value="C"/ >答案是 5</label>
-          <p></p>
-          <p class="help" hidden>提示: /使用除法运算法则</p>
-        </div>
-      </form>
+      <div id="quiz_list"></div>
 
       <button type="button">&nbsp;&nbsp;提交&nbsp;&nbsp;</button>
       <div id="result"></div>

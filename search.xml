@@ -1,6 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>MIT6.824</title>
+    <url>/posts/61252/</url>
+    <content><![CDATA[<h1 id="MIT6-824-Lab-学习笔记"><a href="#MIT6-824-Lab-学习笔记" class="headerlink" title="MIT6.824 Lab 学习笔记"></a>MIT6.824 Lab 学习笔记</h1><p>[toc]</p>
+<p>本篇记录自己学习<a href="https://pdos.csail.mit.edu/6.824/">MIT6.824</a>的Lab记录，只记录思考过程，不记录具体的实现细节</p>
+<p>环境</p>
+<ul>
+<li>WSL2 Ubuntu 22.04</li>
+<li>Goland 最新版</li>
+<li>Go 最新版</li>
+</ul>
+<h2 id="Lab1-MapReduce"><a href="#Lab1-MapReduce" class="headerlink" title="Lab1 - MapReduce"></a>Lab1 - MapReduce</h2><h3 id="一-测试原理窥探"><a href="#一-测试原理窥探" class="headerlink" title="一. 测试原理窥探"></a>一. 测试原理窥探</h3><p>首先观察<code>test-mr.sh</code>，也就是Lab1中提到的用以测试实现是否正确的文件。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">maybe_quiet $TIMEOUT ../mrcoordinator ../pg*txt &amp;</span><br><span class="line">pid=$!</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">give the coordinator time to create the sockets.</span></span><br><span class="line">sleep 1</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">start multiple workers.</span></span><br><span class="line">(maybe_quiet $TIMEOUT ../mrworker ../../mrapps/wc.so) &amp;</span><br><span class="line">(maybe_quiet $TIMEOUT ../mrworker ../../mrapps/wc.so) &amp;</span><br><span class="line">(maybe_quiet $TIMEOUT ../mrworker ../../mrapps/wc.so) &amp;</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash"><span class="built_in">wait</span> <span class="keyword">for</span> the coordinator to <span class="built_in">exit</span>.</span></span><br><span class="line">wait $pid</span><br></pre></td></tr></table></figure>
+
+<p>从此处可得知测试的原理是启动一个<code>mrcoordinator</code> 和数个<code>mrworker</code>，通过本机rpc调用的形式模拟分布式场景。</p>
+<p>同时，测试会通过<code>mrsequential</code>生成正确的答案，要做的主要是修改<code>rpc.go</code>,<code>worker.go</code>,<code>coordinator.go</code>这几个文件，其余文件暂时不需要进行修改。</p>
+<p>在<code>coordinator</code> 文件中启动了rpc服务器，<code>mrworker</code>中根据命令行参数调用<code>LoadPlugin</code>加载<code>.so</code>文件中编译完成的map和reduce函数。在<code>coordinator</code>中，代码框架封装了一些网络通信的部分，其提供的<code>call</code>函数完成了参数的传递和回答的接收。</p>
+<h3 id="二-运行原理及初期规划"><a href="#二-运行原理及初期规划" class="headerlink" title="二. 运行原理及初期规划"></a>二. 运行原理及初期规划</h3><h4 id="顺序MapReduce模型"><a href="#顺序MapReduce模型" class="headerlink" title="顺序MapReduce模型"></a>顺序MapReduce模型</h4><p>在Lab1的开始，指导中通过<code>mrsequential</code>生成正确的文件，我们先通过梳理<code>mrsequential</code>的方式逆推<code>MapReduce</code>的运行方式。</p>
+<p><img src="/MIT6-824/image-20230605145850254.png" alt="image-20230605145850254"></p>
+<p>可以看到，代码以顺序的方式对文件中的每个单词进行拆分，排序后，由Reduce函数负责计数，最终输出成一个文件作为结果，其中文件是每个单词的数量。</p>
+<p>而我们要实现的版本就是并行的MapReduce模型，我们的Map和Reduce函数是不变的，但是File会分发给不同的Worker进行Map，Map完成后由Worker再进行Reduce，并输出成文件。</p>
+<h4 id="细节补充"><a href="#细节补充" class="headerlink" title="细节补充"></a>细节补充</h4><p><code>mrsequential</code>的代码非常简单的描述了MapReduce的工作流程，下面补充一些MapReduce的细节(详见原文<a href="https://pdos.csail.mit.edu/6.824/papers/mapreduce.pdf">mapreduce.pdf</a>)，本处只是简单提了一下论文中提到的重要信息。</p>
+<p><strong>Master结构</strong></p>
+<ol>
+<li>存储所有任务(Map,Reduce)的状态，包括未开始、进行中、已完成</li>
+<li>中间结果的位置(location)和大小(size)，并将结果推送给进行reduce任务的worker</li>
+</ol>
+<p><strong>容错相关</strong></p>
+<ol>
+<li>Worker失效 —— Master会定期Ping每个Worker，无法回复Ping信号的Worker会被视作失败。同时将对应Worker的任务都重置为idle，同时因为每个Worker执行Map函数后会将文件存储在本地，因此完成的任务也需要重做。</li>
+<li>Master失效 —— 可以通过Checkpoints恢复之前的进度，但是因为失效几率太低，所以论文之中没有实现。</li>
+<li>多个Worker同时完成一个任务时，他们会先将要输出的文件命名为一个临时文件，在Go中可以使用<code>ioutil.TempFile</code>，待完成任务后，原子性(atomically)的对文件进行重命名，确保只有一份正确的结果。</li>
+</ol>
+<p><strong>可改善的细节</strong></p>
+<ol>
+<li>分区，针对Map产生的Key进行分桶策略</li>
+<li>对中间结果进行Key排序</li>
+<li>对于部分有大量重复Key的，可以在分发Reduce之前进行部分合并</li>
+<li>…详见论文</li>
+</ol>
+<h4 id="规划Lab1"><a href="#规划Lab1" class="headerlink" title="规划Lab1"></a>规划Lab1</h4><p>结合上面所述，我认为Lab1可以分为如下几个阶段进行实现:</p>
+<ul>
+<li>基础通讯功能，包含<code>worker</code>向<code>coordinator</code>请求任务，<code>coordinator</code>返回当前任务阶段等</li>
+<li>任务划分、进度收集功能，<code>coordinator</code>将任务分给<code>worker</code>并且回收结果</li>
+<li><code>coordinator</code>统筹整个流程，对于失败的任务进行再分发</li>
+</ul>
+<h2 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h2><h3 id="Coordinator"><a href="#Coordinator" class="headerlink" title="Coordinator"></a>Coordinator</h3><h3 id="Worker"><a href="#Worker" class="headerlink" title="Worker"></a>Worker</h3><h2 id="参考网络上的答案并进行反思"><a href="#参考网络上的答案并进行反思" class="headerlink" title="参考网络上的答案并进行反思"></a>参考网络上的答案并进行反思</h2><h2 id="重构"><a href="#重构" class="headerlink" title="重构"></a>重构</h2>]]></content>
+      <categories>
+        <category>Lab</category>
+      </categories>
+      <tags>
+        <tag>Lab</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>LeetCode</title>
     <url>/posts/61255/</url>
     <content><![CDATA[<h1 id="刷题记录"><a href="#刷题记录" class="headerlink" title="刷题记录"></a>刷题记录</h1><h2 id="215-数组中的第-K-个最大元素"><a href="#215-数组中的第-K-个最大元素" class="headerlink" title="215. 数组中的第 K 个最大元素"></a><a href="https://leetcode.cn/problems/kth-largest-element-in-an-array/">215. 数组中的第 K 个最大元素</a></h2><blockquote>
@@ -35,28 +89,6 @@
 </blockquote>
 <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">bool</span> <span class="title">canTraverseAllPairs</span><span class="params">(vector&lt;<span class="type">int</span>&gt;&amp; nums)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//若A中集合可行遍</span></span><br><span class="line">        <span class="comment">//B只需与A中任意一个集合可以行遍即可</span></span><br><span class="line">        <span class="function">vector&lt;<span class="type">int</span>&gt; <span class="title">fa</span><span class="params">(<span class="number">1e5</span> + <span class="number">1</span>)</span></span>;</span><br><span class="line">        <span class="function">vector&lt;<span class="type">int</span>&gt; <span class="title">sz</span><span class="params">(<span class="number">1e5</span> + <span class="number">1</span>)</span></span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span> ; i &lt;= <span class="number">1e5</span> ; ++i) fa[i] = i, sz[i] = <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">        std::function&lt;<span class="type">int</span>(<span class="type">int</span>)&gt; getFa = [&amp;getFa,&amp;fa](<span class="type">int</span> x) &#123;</span><br><span class="line">            <span class="keyword">if</span>(fa[x] == x) <span class="keyword">return</span> fa[x];</span><br><span class="line">            <span class="keyword">return</span> fa[x] = <span class="built_in">getFa</span>(fa[x]);</span><br><span class="line">        &#125;;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">auto</span> setFa = [&amp;](<span class="type">int</span> x,<span class="type">int</span> y)&#123;</span><br><span class="line">            <span class="comment">//cout &lt;&lt; &quot;setFa &quot; &lt;&lt; x &lt;&lt; &quot; &quot; &lt;&lt; y &lt;&lt; endl;</span></span><br><span class="line">            <span class="type">int</span> fa_x = <span class="built_in">getFa</span>(x);</span><br><span class="line">            <span class="type">int</span> fa_y = <span class="built_in">getFa</span>(y);</span><br><span class="line">            <span class="keyword">if</span>(fa_x != fa_y) &#123;</span><br><span class="line">                fa[fa_x] = fa_y;</span><br><span class="line">                sz[fa_y] += sz[fa_x];</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;;</span><br><span class="line"></span><br><span class="line">        map&lt;<span class="type">int</span>,<span class="type">int</span>&gt; pos;</span><br><span class="line">        <span class="keyword">auto</span> handle_num = [&amp;](<span class="type">int</span> factor,<span class="type">int</span> index)&#123;</span><br><span class="line">            <span class="keyword">if</span>(pos.<span class="built_in">count</span>(factor) != <span class="number">0</span>) &#123;</span><br><span class="line">                <span class="built_in">setFa</span>(index, pos[factor]);</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                pos[factor] = index;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;;</span><br><span class="line">        <span class="type">int</span> idx&#123;<span class="number">0</span>&#125;;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">auto</span> &amp; num : nums) &#123;</span><br><span class="line">            <span class="comment">//分解num</span></span><br><span class="line">            <span class="keyword">for</span>(<span class="type">int</span> x = <span class="number">2</span>; x * x &lt;= num ; ++x) &#123;</span><br><span class="line">                <span class="keyword">if</span>(num % x == <span class="number">0</span>)&#123;</span><br><span class="line">                    <span class="built_in">handle_num</span>(x, idx);</span><br><span class="line">                    num /= x;</span><br><span class="line">                    <span class="keyword">while</span>(num % x == <span class="number">0</span>) num /= x;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span>(num &gt; <span class="number">1</span>) <span class="built_in">handle_num</span>(num, idx);</span><br><span class="line">            idx++;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> sz[<span class="built_in">getFa</span>(<span class="number">0</span>)] == nums.<span class="built_in">size</span>();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 ]]></content>
-  </entry>
-  <entry>
-    <title>CUDA学习</title>
-    <url>/posts/62927/</url>
-    <content><![CDATA[<h1 id="CUDA-简单学习笔记"><a href="#CUDA-简单学习笔记" class="headerlink" title="CUDA 简单学习笔记"></a>CUDA 简单学习笔记</h1><p><a href="/attachment/hello.cu">CUDA 版本的 HELLO WORLD</a></p>
-<p>执行的方式 <strong>Host Code</strong> -&gt; <strong>Parallel Code</strong> -&gt; <strong>Host Code</strong> -&gt; <strong>Parallel Code</strong></p>
-<p>分为host和device，分别表示CPU及其内存和GPU及GPU内存</p>
-<p>GPU和CPU结构图(图源 <a href="https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html">Nvidia Cuda Doc</a>)</p>
-<p><img src="https://docs.nvidia.com/cuda/cuda-c-programming-guide/_images/gpu-devotes-more-transistors-to-data-processing.png" alt="The GPU Devotes More Transistors to Data Processing"></p>
-<p>GPU有比CPU更多的单元，CPU负责串行程序、GPU负责并行程序</p>
-<p>CUDA中的核函数可以通过 <code>&lt;&lt;&lt;grid, block&gt;&gt;&gt;</code> 的方式调用，每个GPU线程有个 <strong>thread ID</strong> </p>
-<p>层级关系 <strong>Kernel</strong> -&gt; <strong>Grid</strong> -&gt; <strong>Block</strong> -&gt; <strong>Thread</strong></p>
-<p>每个线程有自己的私有本地内存，还可以访问线程块的共享内存，GPU还有一块全局的全局内存。</p>
-<p>线程有<strong>SM</strong>进行调度。</p>
-<p><strong>Dispatch</strong> -&gt; <strong>Group</strong> -&gt; <strong>Thead ID</strong> </p>
-]]></content>
-      <categories>
-        <category>CUDA</category>
-      </categories>
-      <tags>
-        <tag>CUDA</tag>
-      </tags>
   </entry>
   <entry>
     <title>C++文件库实践 filesystem</title>

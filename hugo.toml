@@ -1,4 +1,8 @@
-baseURL = 'https://xys4.gitlab.io/blog'
+baseURL = 'https://xys4.gitlab.io/xys/blog'
 languageCode = 'en-us'
 title = 'My New Hugo Site'
 theme = 'ananke'
+
+[build]
+[build.buildStats]
+enable = true
